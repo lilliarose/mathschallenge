@@ -1,0 +1,176 @@
+<html>
+<head>
+    <title>Get Selected Text  of SELECT Element using JavaScript</title>
+    <style>
+    	select, p {
+        	font: 1em Calibri;
+        }
+    </style>
+</head>
+<body>
+    <select id="sel" onchange="selectText(this)">
+        <option value="">-- Select --</option>
+        <option value="001">Hairy Woodpecker</option>
+        <option value="002">Brewer's Sparrow</option>
+        <option value="003">White-tailed Hawk</option>
+    </select>
+    
+    <p id='msg'>
+    
+    </p>
+</body>
+<script>
+    let selectText = (ele) => {
+    	let msg = document.getElementById('msg');
+        msg.innerHTML = 'Selected Text: <b>' + ele.options[ele.selectedIndex].text + '</b> </br>' +
+            'Value of the Selected Text: <b>' + ele.value + '</b>';
+    }
+</script>
+</html>
+
+
+if (currentStage == 102) { //10s multiply mixed
+                    
+    for (let i = 0; i < 10; i++){
+        num1.push(i+1);
+        num2.push(10);
+        symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+    }
+
+    num1 = randomShuffle(num1);
+
+    for (let i = 0; i < 10; i++){
+        ans.push(num1[i]*num2[i]);
+    }
+
+    num1_quest = num1;
+    num2_quest = num2;
+    alert(num1_quest);
+    alert(num2_quest);
+    alert(ans);
+}
+
+if (currentStage == 103) { //10s division mixed
+    
+    for (let i = 0; i < 10; i++){
+        num1.push((i+1)*10);
+        num2.push(10);
+        symbol.push('\u00BD'); // '\u00F7' is the unicode 'multiply' symbol
+    }
+
+    num1 = randomShuffle(num1);
+
+    for (let i = 0; i < 10; i++){
+        ans.push(num1[i]/num2[i]);
+    }
+
+    num1_quest = num1;
+    num2_quest = num2;
+    alert(num1_quest);
+    alert(num2_quest);
+    alert(ans);
+    alert(symbol);
+    
+}
+
+if (currentStage == 'stageSeven') { //5s and 10s division and multiply mixed
+    
+    for (let i = 0; i < 10; i++){
+        num1.push((i+1)*10);
+        num2.push(10);
+        symbol.push('\u00F7'); // '\u00F7' is the unicode 'multiply' symbol
+    }
+
+    num1 = randomShuffle(num1);
+    num1_quest = randomSample(array, 3);
+
+    for (let i = 0; i < 10; i++){
+        ans.push(num1[i]/num2[i]);
+    }
+
+    num1_quest = num1;
+    num2_quest = num2;
+    alert(num1_quest);
+    alert(num2_quest);
+    alert(ans);
+    alert(symbol);
+}
+
+
+
+                    
+                    case '114': //8s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(8);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '115': //8s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(8);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '116': //8s division
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*5);
+                            num2.push(8);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '117': //2s, 4s and 8s mixed
+                        let operationType = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+                        operationType = randomShuffle(operationType);
+                        let tableValue = [2, 4, 8];
+                        tableValue = randomChoices(tableValue, 10);
+                        num1 = randomShuffle([1,2,3,4,5,6,7,8,9,10]); 
+
+                        for (let i = 0; i < 10; i++) {
+                            //num1.push(i+1);
+                            num2.push(tableValue[i]);
+                            if (operationType[i] == 0) {
+                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                                num1[i] = num1[i]*tableValue[i]
+                            } else {
+                                symbol.push('\u00D7'); // '\u00F7' is the unicode 'multiply' symbol
+                            }
+                        }                                                                
+
+                        for (let i = 0; i < 10; i++) {
+                            if (operationType[i] == 0) {
+                                ans.push(num1[i]/num2[i]);
+                            } else {
+                                ans.push(num1[i]*num2[i]);
+                            }                            
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;

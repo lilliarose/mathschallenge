@@ -1,0 +1,1154 @@
+<!DOCTYPE HTML>
+<html lang = 'en'>
+    <head>
+        <title>Maths Challenge</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+
+        <script>
+            //does this as soon as the window loads
+            window.onload = (event) => {
+                    addClickListeners();
+                    let buttonMarkIt = document.getElementById("markIt");
+                    buttonMarkIt.disabled = true;
+                    let buttonGo = document.getElementById("goButton");
+                    buttonGo.disabled = true;
+            }
+            
+            //define variables with script-wide scope
+            let realAnswers
+            let red = "#d10e00";
+            let green = "#43b516";
+            const question_id = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10']
+            const userAnswer_id = ['inputAnswer1','inputAnswer2','inputAnswer3','inputAnswer4','inputAnswer5','inputAnswer6','inputAnswer7','inputAnswer8','inputAnswer9','inputAnswer10']
+            const mark_id = ['mark1','mark2','mark3','mark4','mark5','mark6','mark7','mark8','mark9','mark10']
+
+            //called when window loads
+            function addClickListeners() {
+                //go button click listener
+                let button = document.getElementById("goButton");
+                button.addEventListener("click", callback_goButton);
+                let markIt = document.getElementById("markIt");
+                markIt.addEventListener("click", callback_markIt);
+                //markIt.disabled = true;
+            }
+
+            //called when dropdown list is changed
+            function callback_changeStage() {  
+
+                // Clear any previous questions, user answers and marks from the screen
+                for (let i = 0; i < 10; i++) {
+                    document.getElementById(question_id[i]).innerHTML  = "";
+                    document.getElementById(userAnswer_id[i]).value = "";
+                    document.getElementById(mark_id[i]).style.backgroundColor = "#cccccc";
+                }
+
+                if (getCurrentStage() == "unselected") {
+                    let buttonMarkIt = document.getElementById("markIt");
+                    buttonMarkIt.disabled = true;
+                    let buttonGo = document.getElementById("goButton");
+                    buttonGo.disabled = true;
+                    return                   
+                } 
+
+                // Make 'GO!'' button active and set focus to the 'GO!' button, make 'Mark it' disabled 
+                let buttonMarkIt = document.getElementById("markIt");
+                buttonMarkIt.disabled = true;
+                let buttonGo = document.getElementById("goButton");
+                buttonGo.disabled = false;
+                buttonGo.focus()
+            }
+
+            function callback_goButton() {
+
+                if (getCurrentStage() == "unselected") {
+                    return                    
+                } 
+
+                // Clear any previous questions, user answers and marks from the screen
+                for (let i = 0; i < 10; i++) {
+                    document.getElementById(question_id[i]).innerHTML  = "";
+                    document.getElementById(userAnswer_id[i]).value = "";
+                    document.getElementById(mark_id[i]).style.backgroundColor = "#cccccc";
+                }
+
+                // Make 'Mark It' button active
+                let buttonMarkIt = document.getElementById("markIt");
+                buttonMarkIt.disabled = false;
+
+                // Clear the time taken from previous go
+                // CODE THIS
+
+                // Get the question text and answers
+                let [num1_quest, symbol, num2_quest, ans] = getQuestions();
+                
+                // Fill up the questions 
+                    for (let i = 0; i < 10; i++) {
+                        // Runs 10 times and changes element id then put in a question to be shown
+                        document.getElementById(question_id[i]).innerHTML = num1_quest[i] + symbol[i] + num2_quest[i];
+                    }
+
+                // Set focus to first answer input location
+                 document.getElementById(userAnswer_id[0]).focus();
+
+                // Start timer
+                // CODE THIS                
+            }
+
+            // Returns what stage is selected
+            function getCurrentStage() {
+                let currentStage = document.getElementById("dropdown-menu").value;
+                return(currentStage)
+            }
+
+            function callback_markIt() {
+                // Find and display the time taken 
+                // CODE THIS
+
+                // Compare the true answers to the user answers, change box to red/green as appropriate
+                for (let i = 0; i < 10; i++) {
+                    if (document.getElementById(userAnswer_id[i]).value == realAnswers[i]) {
+
+                        document.getElementById(mark_id[i]).style.backgroundColor = green;
+                    } else {
+                        document.getElementById(mark_id[i]).style.backgroundColor = red;
+                    }
+                }
+                
+                // Set focus to the GO! button
+                // CODE THIS (not sure we need to)
+
+            }
+
+            // Uses current stage to get questions, question text, and answers
+            function getQuestions() {
+
+                let num1 = []; // used with num2 to work out the correct answers
+                let num2 = []; // used with num1 to work out the correct answers
+                let ans = []; // the correct answers
+                let num1_quest = []; // the actual item to appear in the displayed question in the 'num1_quest' location. Often it is just a copy of num1, but for example a double question num1 would be '2' whilst num1_quest would be 'Double'
+                let symbol = []; // the actual item to appear in the displayed question in the 'symbol' location.
+                let num2_quest = []; //the actual item to appear in the displayed question in the 'num2_quest' location.
+                let timesTableSelected = []; // the number (or numbers) in the times table choice seleced (e.g. [2, 4, 8] for 2s, 4s, and 8s)
+                let isDivide = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]; // if a mixed (multiply and divide) question, use this array (random shuffle first) to determine operatoin type
+                let isRandomised = [0]; // If the stage slected is random order
+                let questionType  //               
+                let currentStage = getCurrentStage(); // The currently selected stage
+
+                // The question types of each stage
+                let multiplyStages = [101, 102, 104, 105, 108, 109, 111, 112, 114, 115, 118, 119, 121, 122, 124, 125, 128, 129];
+                let divideStages = [103, 106, 110, 113, 116, 120, 123, 126, 130];
+                let multiplyAndDivideStages = [107, 117, 127, 131];
+                let halfsStages = [];
+                let doublesStages = [];
+                let squaredStages =[];
+                let cubedStages = [];
+                let cubeRouteStages = [];
+                let fractionsStages = [];
+                let factorsStages = [];
+                let modulusStages = [];
+                let percentStages = [];
+
+                // For each stage work out the 1x10 array variables: num1, num2, symbol, ans, num1_quest, num2_quest              
+                // Questions appear as: 'num1_quest'   'symbol'   'num2_quest'
+
+                // First get the question type, as common operations happen for a given question type.
+                if (multiplyStages.include(currentStage)) {
+                    questionType = 'multiply';
+                } else if (divideStages.include(currentStage)) {
+                    questionType = 'divide';
+
+                }
+                
+
+                switch (currentStage) {
+                    case '101': //10s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(10);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '102': //10s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(10);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '103': //10s division mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*10);
+                            num2.push(10);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '104': //5s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(5);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '105': //5s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(5);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '106': //5s division
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*5);
+                            num2.push(5);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '107': //5s and 10s mixed
+                        operationType = randomShuffle(operationType);
+                        tableValue = [5, 10];
+                        tableValue = randomChoices(tableValue, 10)
+                        num1 = randomShuffle([1,2,3,4,5,6,7,8,9,10]); 
+
+                        for (let i = 0; i < 10; i++) {
+                            //num1.push(i+1);
+                            num2.push(tableValue[i]);
+                            if (operationType[i] == 0) {
+                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                                num1[i] = num1[i]*tableValue[i]
+                            } else {
+                                symbol.push('\u00D7'); // '\u00F7' is the unicode 'multiply' symbol
+                            }
+                        }                                                                
+
+                        for (let i = 0; i < 10; i++) {
+                            if (operationType[i] == 0) {
+                                ans.push(num1[i]/num2[i]);
+                            } else {
+                                ans.push(num1[i]*num2[i]);
+                            }                            
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '108': //2s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(2);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '109': //2s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(2);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '110': //2s division
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*2);
+                            num2.push(2);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '111': //4s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(4);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '112': //4s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(4);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '113': //4s division
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*4);
+                            num2.push(4);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '114': //8s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(8);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '115': //8s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(8);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '116': //8s division
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*8);
+                            num2.push(8);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '117': //2s, 4s and 8s mixed
+                        operationType = randomShuffle(operationType);
+                        tableValue = [2, 4, 8];
+                        tableValue = randomChoices(tableValue, 10);
+                        num1 = randomShuffle([1,2,3,4,5,6,7,8,9,10]); 
+
+                        for (let i = 0; i < 10; i++) {
+                            //num1.push(i+1);
+                            num2.push(tableValue[i]);
+                            if (operationType[i] == 0) {
+                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                                num1[i] = num1[i]*tableValue[i]
+                            } else {
+                                symbol.push('\u00D7'); // '\u00F7' is the unicode 'multiply' symbol
+                            }
+                        }                                                                
+
+                        for (let i = 0; i < 10; i++) {
+                            if (operationType[i] == 0) {
+                                ans.push(num1[i]/num2[i]);
+                            } else {
+                                ans.push(num1[i]*num2[i]);
+                            }                            
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '118': //3s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(3);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '119': //3s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(3);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '120': //3s division
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*3);
+                            num2.push(3);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '121': //6s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(6);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '122': //6s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(6);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '123': //6s division
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*6);
+                            num2.push(6);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '124': //9s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(9);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '125': //9s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(9);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '126': //9s division
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*9);
+                            num2.push(9);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '127': //3s, 6s and 9s mixed
+                        operationType = randomShuffle(operationType);
+                        tableValue = [3, 6, 9];
+                        tableValue = randomChoices(tableValue, 10);
+                        num1 = randomShuffle([1,2,3,4,5,6,7,8,9,10]); 
+
+                        for (let i = 0; i < 10; i++) {
+                            //num1.push(i+1);
+                            num2.push(tableValue[i]);
+                            if (operationType[i] == 0) {
+                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                                num1[i] = num1[i]*tableValue[i]
+                            } else {
+                                symbol.push('\u00D7'); // '\u00F7' is the unicode 'multiply' symbol
+                            }
+                        }                                                                
+
+                        for (let i = 0; i < 10; i++) {
+                            if (operationType[i] == 0) {
+                                ans.push(num1[i]/num2[i]);
+                            } else {
+                                ans.push(num1[i]*num2[i]);
+                            }                            
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '128': //7s multiply in order
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            num1.push(i + 1);
+                            num2.push(7);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '129': //7s multiply mixed
+                        for (let i = 0; i < 10; i++) {
+                            num1.push(i+1);
+                            num2.push(7);
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]*num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '130': //7s division
+                        for (let i = 0; i < 10; i++) {
+                            num1.push((i+1)*7);
+                            num2.push(7);
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                        }
+
+                        num1 = randomShuffle(num1);
+
+                        for (let i = 0; i < 10; i++) {
+                            ans.push(num1[i]/num2[i]);
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case '131': //2-10s mixed
+                        operationType = randomShuffle(operationType);
+                        tableValue = [2, 3, 4, 5, 6, 7, 8, 9];
+                        tableValue = randomChoices(tableValue, 10);
+                        num1 = randomChoices([2,3,4,5,6,7,8,9,10], 10); 
+
+                        for (let i = 0; i < 10; i++) {
+                            //num1.push(i+1);
+                            num2.push(tableValue[i]);
+                            if (operationType[i] == 0) {
+                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                                num1[i] = num1[i]*tableValue[i]
+                            } else {
+                                symbol.push('\u00D7'); // '\u00F7' is the unicode 'multiply' symbol
+                            }
+                        }                                                                
+
+                        for (let i = 0; i < 10; i++) {
+                            if (operationType[i] == 0) {
+                                ans.push(num1[i]/num2[i]);
+                            } else {
+                                ans.push(num1[i]*num2[i]);
+                            }                            
+                        }
+
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+                    
+                }
+
+
+                realAnswers = ans;
+                return([num1_quest, symbol, num2_quest, ans]); 
+
+            }
+
+            
+            //function for generating an array of numbers with a 'start' 'end' and 'step'
+            function generateNumberArray(start, end, step) {
+                let array = [];
+                for (var i = start; i <= end; i+step) {
+                    array.push(i);
+                }
+                return array
+            }
+
+            //function to perform a random shuffle of an array. See https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+            function randomShuffle(array) {
+                let currentIndex = array.length,  randomIndex;
+
+                // While there remain elements to shuffle.
+                while (currentIndex != 0) {
+
+                    // Pick a remaining element.
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+
+                    // And swap it with the current element.
+                    [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+                }
+                return array
+            }
+
+            // funtion to pick a random sample of k items from an array, item is not repeated
+            function randomSample(array, k) {
+                let newArray = [];
+                let currentIndex = array.length, randomIndex;
+               
+                // While there remain elements to be picked.
+                while (currentIndex != array.length - k) {
+
+                    // Pick a remaining element.
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+
+                    // And swap it with the current element so it wont get picked again.
+                    [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+                }
+                // Get the randomly picked elements stored at the end of the array
+                newArray = array.slice(array.length - k)
+
+                return newArray
+
+            }
+
+            // funtion to pick a random sample of k items from an array, item can be repeated
+            function randomChoices(array, k) {
+                let newArray = [];
+
+                for (let i = 0; i < k; i++){
+                    randomIndex = Math.floor(Math.random() * array.length)
+                    newArray.push(array[randomIndex])
+                }
+
+                return newArray
+            }
+
+
+
+
+
+        </script>
+    </head>
+    
+
+    <body style="align-content: center; padding-top: 0%;" id="body">
+
+        <style>
+        /*    #body {
+            width: 100%;
+            height: 100vh;
+            background: url("background.jpg") top right;
+            background-size: cover;
+            position: relative;
+            }
+
+            .white {
+                color: white;
+            } */
+        </style>
+
+
+        <!--Title-->
+        <h1 class="text-center white">Maths Challenge</h1>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-2">
+                    <!--Go button-->
+                    <div class="container-fluid d-flex justify-content-center">
+                        <button class="btn btn-primary" type="submit" id="goButton" style="margin-top: 5%;">Go!</button>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <!--Dropdown-->
+                    <div class="dropdown d-flex justify-content-center" style="padding-bottom: 2%; padding-top: 2%;"></i>
+                        <select id="dropdown-menu" onchange="callback_changeStage()" style="text-align-last: center; background-color: #aebdff; min-width: 200px; min-height: 50px;">
+                            <option value="unselected" style="text-align-last: center;">Select Stage</option>
+                            <option value="101" style="text-align-last: center;">1.    10s in Order</option>
+                            <option value="102" style="text-align-last: center;">2.    10s mixed</option>
+                            <option value="103" style="text-align-last: center;">3.    10s division mixed</option>
+                            <option value="104" style="text-align-last: center;">4.    5s in Order</option>
+                            <option value="105" style="text-align-last: center;">5.    5s mixed</option>
+                            <option value="106" style="text-align-last: center;">6.    5s division mixed</option>
+                            <option value="107" style="text-align-last: center;">7.    10s and 5s mixed</option>
+                            <option value="108" style="text-align-last: center;">8.    2s in order</option>
+                            <option value="109" style="text-align-last: center;">9.    2s mixed</option>
+                            <option value="110" style="text-align-last: center;">10.   2s division mixed</option>
+                            <option value="111" style="text-align-last: center;">11.   4s in order</option>
+                            <option value="112" style="text-align-last: center;">12.   4s mixed</option>
+                            <option value="113" style="text-align-last: center;">13.   4s division mixed</option>
+                            <option value="114" style="text-align-last: center;">14.   8s in order</option>
+                            <option value="115" style="text-align-last: center;">15.   8s mixed</option>
+                            <option value="116" style="text-align-last: center;">16.   8s division mixed</option>
+                            <option value="117" style="text-align-last: center;">17.   2, 4, 8s mixed</option>
+                            <option value="118" style="text-align-last: center;">18.   3s in order</option>
+                            <option value="119" style="text-align-last: center;">19.   3s mixed</option>
+                            <option value="120" style="text-align-last: center;">20.   3s division mixed</option>
+                            <option value="121" style="text-align-last: center;">21.   6s in order</option>
+                            <option value="122" style="text-align-last: center;">22.   6s mixed</option>
+                            <option value="123" style="text-align-last: center;">23.   6s division mixed</option>
+                            <option value="124" style="text-align-last: center;">24.   9s in order</option>
+                            <option value="125" style="text-align-last: center;">25.   9s mixed</option>
+                            <option value="126" style="text-align-last: center;">26.   9s division mixed</option>
+                            <option value="127" style="text-align-last: center;">27.   3, 6, 9s mixed</option>
+                            <option value="128" style="text-align-last: center;">28.   7s in order</option>
+                            <option value="129" style="text-align-last: center;">29.   7s mixed</option>
+                            <option value="130" style="text-align-last: center;">30.   7s division mixed</option>
+                            <option value="131" style="text-align-last: center;">31.   2s - 10s mixed</option>
+                            
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Table for challenge-->
+        <div class="container-fluid">          
+            <div class="d-flex justify-content-center">
+                <table class="table w-25">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width: 24%">Number</th>
+                        <th scope="col" style="width: 24%">Question</th>
+                        <th scope="col" style="width: 28%">Your Answer</th>
+                        <th scope="col" style="width: 24%">Marks</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <!--Row one-->
+                    <tr>
+                        <th scope="row">1</th>
+                        <td id="q1"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer1" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <input class="form-control" id ="mark1" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    
+                    <!--Row two-->
+                    <tr>
+                        <th scope="row">2</th>
+                        <td id="q2"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer2" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                     <!--style="background-color: #cccccc;"-->
+                                    <input class="form-control" id ="mark2" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    <!--Row three-->
+                    <tr>
+                        <th scope="row">3</th>
+                        <td id="q3"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer3" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <input class="form-control" id="mark3" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    <!--Row four-->
+                    <tr>
+                        <th scope="row">4</th>
+                        <td id="q4"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer4" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <input class="form-control" id ="mark4" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    <!-- TAB-Index: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex-->
+
+                    
+                    <!--Row five-->
+                    <tr>
+                        <th scope="row">5</th>
+                        <td id="q5"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer5" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <input class="form-control" id ="mark5" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    <!--Row six-->
+                    <tr>
+                        <th scope="row">6</th>
+                        <td id="q6"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer6" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <input class="form-control" id="mark6" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    <!--Row seven-->
+                    <tr>
+                        <th scope="row">7</th>
+                        <td id="q7"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer7" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <input class="form-control" id ="mark7" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    <!--Row eight-->
+                    <tr>
+                        <th scope="row">8</th>
+                        <td id="q8"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer8" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <input class="form-control" id="mark8" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    <!--Row nine-->
+                    <tr>
+                        <th scope="row">9</th>
+                        <td id="q9"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer9" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <input class="form-control" id ="mark9" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    
+                    <!--Row ten-->
+                    <tr>
+                        <th scope="row">10</th>
+                        <td id="q10"></td>
+                        <td>
+                            <input type="text" class="form-control" id="inputAnswer10" tabindex="0">
+                        </td>
+                        <td>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <input class="form-control" id ="mark10" style="background-color: #cccccc;">
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+            <!--Mark it button-->
+        <div class="container-fluid d-flex justify-content-center">
+            <button class="btn btn-primary" type="submit" id="markIt" tabindex="0">Mark Answers</button>
+        </div>
+        
+        <!--JavaScript Links-->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    </body>
+
+    <footer>
+
+    </footer>
+</html>
+
+     <!--<script>
+            alert("hello");
+            //Go! Button Code
+            window.onload = (event) => {
+                    addClickListeners();
+            };
+    
+            function addClickListeners() {
+                let button = document.getElementById("goButton");
+                button.addEventListener("click", alert('helloooo'));
+            }
+    
+            //What stage, do function for that stage.
+    
+    
+    
+    
+                // pick a random number given min and max number, a useful function
+            function pickOneNums(minNum, maxNum) {
+                let numOne = Math.floor((Math.random() * maxNum) + minNum);
+                return numOne
+            }
+    
+                //Code to see/show what stage has been selected
+                let something = document.getElementById("stageDropdown");
+                function show(){
+                    var as = document.forms[0].ddlViewBy.value;
+                    var strUser = e.options[e.selectedIndex].value;
+                    console.log(as, strUser);
+                }
+                    e.onchange=show;
+                    show();
+    
+            //Change questions for stage on go.
+            //we pick one number, then a symbol and then a number.
+            //
+    
+            function changeValue() {
+                var numOneList = numOne(1,9)
+                let numOneList = [1, 2, 3, 4];
+                document.getElementById("q1").innerHTML = "9"; //numOneList[0]+str(symbol())+numTwo(1,9);
+                document.getElementById("q2").innerHTML = "New text!";
+                document.getElementById("q3").innerHTML = numTwo(1,9);
+            }
+            
+            //funtion for pick first number
+            function numOne(minNum, maxNum) {
+                let numOne = Math.floor((Math.random() * maxNum) + minNum);
+            return numOne
+            }
+            //function for picking second number
+            function numTwo(minNum, maxNum) {
+                let numTwo = Math.floor((Math.random() * maxNum) + minNum);
+            return numTwo
+            }
+            //function for picking symbol
+            function symbol() {
+                let symbol = Math.floor((Math.random() * 0) + 5)
+                if (symbol = 1) {
+                    let symbol = '+'
+                } else if (symbol = 2) {
+                    let symbol = '-'
+                } else if (symbol = 3) {
+                    let symbol = '*'
+                } else if (symbol = 4) {
+                    let symbol = '/'
+                }
+    
+                return symbol
+            }     
+            
+            
+            
+        //[1, 2, 3].includes(2); //code example to see if an entry is in an array
+        // let a = randomChoices([3],9);
+
+//                if (currentStage == 'stageTwo') {
+//                    let listQA = []
+//                    for (let i = 0; i < 10; i++){
+//                        // Runs 10 times
+//                       listQA.push(pickTwoNumsOrdered(10,i+1));
+//                    }
+//                    listQA = randomShuffle(listQA);
+//                    return(listQA)
+//                }
+
+/*
+            //function for picking symbol
+            function symbol() {
+                let symbol = Math.floor((Math.random() * 0) + 5);
+                if (symbol = 1) {
+                    let symbol = '+';
+                } else if (symbol = 2) {
+                    let symbol = '-';
+                } else if (symbol = 3) {
+                    let symbol = '*';
+                } else if (symbol = 4) {
+                    let symbol = '/';
+                }
+    
+                return symbol
+            }
+*/
+    
+        </script>-->
+
+
+        
+      
+    

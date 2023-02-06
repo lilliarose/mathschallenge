@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html lang = 'en'>
+    <head>
+        <title>Practice</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+        <script>
+            function run() {
+                document.getElementById("srt").value = document.getElementById("dropdown-menu").value;
+            }
+        </script>
+    </head>
+
+    <body>
+        <select id="dropdown-menu" onchange="run()">  <!--Call run() function-->
+            <option value="0">Select</option>
+            <option value="8">text1</option>
+            <option value="5">text2</option>
+            <option value="4">text3</option>
+        </select><br><br>
+        TextBox1<br>
+        <input type="text" id="srt" placeholder="get value on option select"><br>
+        TextBox2<br>
+        <input type="text" id="rtt"  placeholder="Write Something !" onkeyup="up()">
+    </body>        
+</html>
