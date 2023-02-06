@@ -4,6 +4,7 @@
         <title>Maths Challenge</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width">
 
         <script>
             //does this as soon as the window loads
@@ -91,7 +92,7 @@
                 // Fill up the questions 
                     for (let i = 0; i < 10; i++) {
                         // Runs 10 times and changes element id then put in a question to be shown
-                        document.getElementById(question_id[i]).innerHTML = num1_quest[i] + symbol[i] + num2_quest[i];
+                        document.getElementById(question_id[i]).innerHTML = num1_quest[i] + ' ' + symbol[i] + ' ' + num2_quest[i];
                     }
 
                 // Set focus to first answer input location
@@ -123,7 +124,7 @@
                 // Find and display the time taken 
                 let timerEnd = new Date();
                 document.getElementById('resultTime').innerHTML = Math.round((timerEnd.getTime()-timerStart.getTime())/1000) + ' seconds'
-                document.getElementById('resultScore').innerHTML = correctAnswers + '/10.'
+                document.getElementById('resultScore').innerHTML = correctAnswers + ' / 10'
 
                 // Set focus to the GO! button
                 // CODE THIS (not sure we need to)
@@ -772,18 +773,12 @@
         <h1 class="text-center white">Maths Challenge</h1>
 
         <div class="container">
-            <div class="row">
+            <div class="row" style="padding-bottom: 2%; padding-top: 2%;">
                 <div class="col-lg-4"></div>
                 <div class="col-lg-2">
-                    <!--Go button-->
-                    <div class="container-fluid d-flex justify-content-center">
-                        <button class="btn btn-primary" type="submit" id="goButton" style="margin-top: 5%;">Go!</button>
-                    </div>
-                </div>
-                <div class="col-lg-2">
                     <!--Dropdown-->
-                    <div class="dropdown d-flex justify-content-center" style="padding-bottom: 2%; padding-top: 2%;"></i>
-                        <select id="dropdown-menu" onchange="callback_changeStage()" style="text-align-last: center; background-color: #aebdff; min-width: 200px; min-height: 50px;">
+                    <div class="dropdown d-flex justify-content-center"></i>
+                        <select id="dropdown-menu" onchange="callback_changeStage()" style="text-align-last: center; color: white; background-color: #0275d8; min-width: 200px; min-height: 35px;">
                             <option value="unselected" style="text-align-last: center;">Select Stage</option>
                             <option value="101" style="text-align-last: center;">1.    10s in Order</option>
                             <option value="102" style="text-align-last: center;">2.    10s mixed</option>
@@ -820,6 +815,12 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-lg-2">
+                    <!--Go button-->
+                    <div class="container-fluid d-flex justify-content-center">
+                        <button class="btn btn-primary" type="submit" id="goButton" style="margin-top: 5%;">Go!</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -839,15 +840,15 @@
 
                     <!--Row one-->
                     <tr>
-                        <th scope="row">1</th>
-                        <td id="q1"></td>
+                        <th scope="row" class="table-element">1</th>
+                        <td id="q1" class="table-element"></td>
                         <td>
-                            <input type="tel" class="form-control" id="inputAnswer1" tabindex="0">
+                            <input type="tel" class=" table-element form-control" id="inputAnswer1" tabindex="0">
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
-                                    <input class="form-control" id ="mark1" style="background-color: #cccccc;">
+                                <div>
+                                    <input class="table-element form-control" id ="mark1" style="background-color: #cccccc;">
                                 </div>
                             </fieldset>
                         </td>
@@ -863,7 +864,7 @@
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
+                                <div>
                                      <!--style="background-color: #cccccc;"-->
                                     <input class="form-control" id ="mark2" style="background-color: #cccccc;">
                                 </div>
@@ -880,7 +881,7 @@
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
+                                <div>
                                     <input class="form-control" id="mark3" style="background-color: #cccccc;">
                                 </div>
                             </fieldset>
@@ -895,7 +896,7 @@
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
+                                <div>
                                     <input class="form-control" id ="mark4" style="background-color: #cccccc;">
                                 </div>
                             </fieldset>
@@ -914,7 +915,7 @@
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
+                                <div>
                                     <input class="form-control" id ="mark5" style="background-color: #cccccc;">
                                 </div>
                             </fieldset>
@@ -930,7 +931,7 @@
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
+                                <div>
                                     <input class="form-control" id="mark6" style="background-color: #cccccc;">
                                 </div>
                             </fieldset>
@@ -945,7 +946,7 @@
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
+                                <div>
                                     <input class="form-control" id ="mark7" style="background-color: #cccccc;">
                                 </div>
                             </fieldset>
@@ -961,7 +962,7 @@
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
+                                <div>
                                     <input class="form-control" id="mark8" style="background-color: #cccccc;">
                                 </div>
                             </fieldset>
@@ -976,7 +977,7 @@
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
+                                <div>
                                     <input class="form-control" id ="mark9" style="background-color: #cccccc;">
                                 </div>
                             </fieldset>
@@ -993,7 +994,7 @@
                         </td>
                         <td>
                             <fieldset disabled>
-                                <div class="form-group">
+                                <div>
                                     <input class="form-control" id ="mark10" style="background-color: #cccccc;">
                                 </div>
                             </fieldset>
@@ -1006,7 +1007,7 @@
                         <td><p id="resultTime">seconds</p></td>
                         <td></td>
                         <td>
-                            <p id="resultScore">/10</p>
+                            <p id="resultScore">/ 10</p>
                         </td>
                     </tr>
                     </tbody>
