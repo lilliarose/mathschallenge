@@ -34,6 +34,20 @@
                 let markIt = document.getElementById("markIt");
                 markIt.addEventListener("click", callback_markIt);
                 //markIt.disabled = true;
+
+                // TODO: Add buttons for  bronze, silver, gold, platinum stages
+                // see https://dev.to/nicm42/multiple-buttons-looking-like-theyre-staying-pressed-one-at-a-time-4bbb
+                // Bronze #CD7F32
+                // Silver #C0C0C0
+                // Gold #D4AF37
+                // Platinum  #E5E4E2
+                
+                // TODO: Add listener function for bronze, silver, gold, platinum buttons
+
+                
+                // TODO: populate dropdown list with appropriate strings of stage types on cliking of button
+                
+                // TODO: code the getQuestions function for each stage added
             }
 
             //called when dropdown list is changed
@@ -55,7 +69,7 @@
                 } 
                 // Clear the time taken from previous go
                 document.getElementById('resultTime').innerHTML = ' seconds'
-                document.getElementById('resultScore').innerHTML = '/10.'
+                document.getElementById('resultScore').innerHTML = '/ 10'
 
                 // Make 'GO!'' button active and set focus to the 'GO!' button, make 'Mark it' disabled 
                 let buttonMarkIt = document.getElementById("markIt");
@@ -84,7 +98,7 @@
 
                 // Clear the time taken from previous go
                 document.getElementById('resultTime').innerHTML = ' seconds'
-                document.getElementById('resultScore').innerHTML = '/10.'
+                document.getElementById('resultScore').innerHTML = '/ 10'
 
                 // Get the question text and answers
                 let [num1_quest, symbol, num2_quest, ans] = getQuestions();
@@ -140,560 +154,212 @@
                 let num1_quest = []; // the actual item to appear in the displayed question in the 'num1_quest' location. Often it is just a copy of num1, but for example a double question num1 would be '2' whilst num1_quest would be 'Double'
                 let symbol = []; // the actual item to appear in the displayed question in the 'symbol' location.
                 let num2_quest = []; //the actual item to appear in the displayed question in the 'num2_quest' location.
-                let operationType = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1];
-                let tableValue = [];
-                
-                let currentStage = getCurrentStage();
-                //let questionTypes = ['multiply','divide','multiply_and_divide','halfs','doubles','squared','cubed','cube_root','fractions','factors','factorial','modulus','percent']
-            
-                // For each stage work out the 1x10 array variables: num1, num2, symbol, ans, num1_quest, num2_quest              
-
-                // Questions appear as: 'num1_quest'   'symbol'   'num2_quest'
-
-                switch (currentStage) {
-                    case '101': //10s multiply in order
-                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
-                            num1.push(i + 1);
-                            num2.push(10);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                            ans.push(num1[i] * num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '102': //10s multiply mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push(i+1);
-                            num2.push(10);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]*num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '103': //10s division mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push((i+1)*10);
-                            num2.push(10);
-                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]/num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '104': //5s multiply in order
-                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
-                            num1.push(i + 1);
-                            num2.push(5);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                            ans.push(num1[i] * num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '105': //5s multiply mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push(i+1);
-                            num2.push(5);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]*num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '106': //5s division
-                        for (let i = 0; i < 10; i++) {
-                            num1.push((i+1)*5);
-                            num2.push(5);
-                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]/num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '107': //5s and 10s mixed
-                        operationType = randomShuffle(operationType);
-                        tableValue = [5, 10];
-                        tableValue = randomChoices(tableValue, 10)
-                        num1 = randomShuffle([1,2,3,4,5,6,7,8,9,10]); 
-
-                        for (let i = 0; i < 10; i++) {
-                            //num1.push(i+1);
-                            num2.push(tableValue[i]);
-                            if (operationType[i] == 0) {
-                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                                num1[i] = num1[i]*tableValue[i]
-                            } else {
-                                symbol.push('\u00D7'); // '\u00F7' is the unicode 'multiply' symbol
-                            }
-                        }                                                                
-
-                        for (let i = 0; i < 10; i++) {
-                            if (operationType[i] == 0) {
-                                ans.push(num1[i]/num2[i]);
-                            } else {
-                                ans.push(num1[i]*num2[i]);
-                            }                            
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '108': //2s multiply in order
-                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
-                            num1.push(i + 1);
-                            num2.push(2);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                            ans.push(num1[i] * num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '109': //2s multiply mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push(i+1);
-                            num2.push(2);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]*num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '110': //2s division
-                        for (let i = 0; i < 10; i++) {
-                            num1.push((i+1)*2);
-                            num2.push(2);
-                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]/num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '111': //4s multiply in order
-                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
-                            num1.push(i + 1);
-                            num2.push(4);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                            ans.push(num1[i] * num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '112': //4s multiply mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push(i+1);
-                            num2.push(4);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]*num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '113': //4s division
-                        for (let i = 0; i < 10; i++) {
-                            num1.push((i+1)*4);
-                            num2.push(4);
-                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]/num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '114': //8s multiply in order
-                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
-                            num1.push(i + 1);
-                            num2.push(8);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                            ans.push(num1[i] * num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '115': //8s multiply mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push(i+1);
-                            num2.push(8);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]*num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '116': //8s division
-                        for (let i = 0; i < 10; i++) {
-                            num1.push((i+1)*8);
-                            num2.push(8);
-                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]/num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '117': //2s, 4s and 8s mixed
-                        operationType = randomShuffle(operationType);
-                        tableValue = [2, 4, 8];
-                        tableValue = randomChoices(tableValue, 10);
-                        num1 = randomShuffle([1,2,3,4,5,6,7,8,9,10]); 
-
-                        for (let i = 0; i < 10; i++) {
-                            //num1.push(i+1);
-                            num2.push(tableValue[i]);
-                            if (operationType[i] == 0) {
-                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                                num1[i] = num1[i]*tableValue[i]
-                            } else {
-                                symbol.push('\u00D7'); // '\u00F7' is the unicode 'multiply' symbol
-                            }
-                        }                                                                
-
-                        for (let i = 0; i < 10; i++) {
-                            if (operationType[i] == 0) {
-                                ans.push(num1[i]/num2[i]);
-                            } else {
-                                ans.push(num1[i]*num2[i]);
-                            }                            
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '118': //3s multiply in order
-                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
-                            num1.push(i + 1);
-                            num2.push(3);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                            ans.push(num1[i] * num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '119': //3s multiply mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push(i+1);
-                            num2.push(3);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]*num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '120': //3s division
-                        for (let i = 0; i < 10; i++) {
-                            num1.push((i+1)*3);
-                            num2.push(3);
-                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]/num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '121': //6s multiply in order
-                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
-                            num1.push(i + 1);
-                            num2.push(6);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                            ans.push(num1[i] * num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '122': //6s multiply mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push(i+1);
-                            num2.push(6);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]*num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '123': //6s division
-                        for (let i = 0; i < 10; i++) {
-                            num1.push((i+1)*6);
-                            num2.push(6);
-                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]/num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '124': //9s multiply in order
-                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
-                            num1.push(i + 1);
-                            num2.push(9);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                            ans.push(num1[i] * num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '125': //9s multiply mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push(i+1);
-                            num2.push(9);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]*num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '126': //9s division
-                        for (let i = 0; i < 10; i++) {
-                            num1.push((i+1)*9);
-                            num2.push(9);
-                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]/num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '127': //3s, 6s and 9s mixed
-                        operationType = randomShuffle(operationType);
-                        tableValue = [3, 6, 9];
-                        tableValue = randomChoices(tableValue, 10);
-                        num1 = randomShuffle([1,2,3,4,5,6,7,8,9,10]); 
-
-                        for (let i = 0; i < 10; i++) {
-                            //num1.push(i+1);
-                            num2.push(tableValue[i]);
-                            if (operationType[i] == 0) {
-                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                                num1[i] = num1[i]*tableValue[i]
-                            } else {
-                                symbol.push('\u00D7'); // '\u00F7' is the unicode 'multiply' symbol
-                            }
-                        }                                                                
-
-                        for (let i = 0; i < 10; i++) {
-                            if (operationType[i] == 0) {
-                                ans.push(num1[i]/num2[i]);
-                            } else {
-                                ans.push(num1[i]*num2[i]);
-                            }                            
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '128': //7s multiply in order
-                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
-                            num1.push(i + 1);
-                            num2.push(7);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                            ans.push(num1[i] * num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '129': //7s multiply mixed
-                        for (let i = 0; i < 10; i++) {
-                            num1.push(i+1);
-                            num2.push(7);
-                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]*num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '130': //7s division
-                        for (let i = 0; i < 10; i++) {
-                            num1.push((i+1)*7);
-                            num2.push(7);
-                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                        }
-
-                        num1 = randomShuffle(num1);
-
-                        for (let i = 0; i < 10; i++) {
-                            ans.push(num1[i]/num2[i]);
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-
-                    case '131': //2-10s mixed
-                        operationType = randomShuffle(operationType);
-                        tableValue = [2, 3, 4, 5, 6, 7, 8, 9];
-                        tableValue = randomChoices(tableValue, 10);
-                        num1 = randomChoices([2,3,4,5,6,7,8,9,10], 10); 
-
-                        for (let i = 0; i < 10; i++) {
-                            //num1.push(i+1);
-                            num2.push(tableValue[i]);
-                            if (operationType[i] == 0) {
-                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
-                                num1[i] = num1[i]*tableValue[i]
-                            } else {
-                                symbol.push('\u00D7'); // '\u00F7' is the unicode 'multiply' symbol
-                            }
-                        }                                                                
-
-                        for (let i = 0; i < 10; i++) {
-                            if (operationType[i] == 0) {
-                                ans.push(num1[i]/num2[i]);
-                            } else {
-                                ans.push(num1[i]*num2[i]);
-                            }                            
-                        }
-
-                        num1_quest = num1;
-                        num2_quest = num2;
-                        break;
-                    
+                let timesTableSelected = []; // the number (or numbers) in the times table choice seleced (e.g. [2, 4, 8] for 2s, 4s, and 8s)
+                let isRandomised = 0; // If the times table stage selcted is random order (eg. bronze stage 5 is '5s mixed', so in random order)
+                let questionType  //               
+                let currentStage = Number(getCurrentStage()); // The currently selected stage
+                let isTimesTableStage = 0;
+
+                // The question types of each stage
+                let timesTableMultiplyStages = [101, 102, 104, 105, 108, 109, 111, 112, 114, 115, 118, 119, 121, 122, 124, 125, 128, 129, 201, 202, 204, 205, 210, 213, 215, 217, 219, 221, 223, 225, 227];
+                let timesTableDivideStages = [103, 106, 110, 113, 116, 120, 123, 126, 130, 203, 206, 211, 214, 216, 218, 220, 222, 224, 226, 228];
+                let timesTableMultiplyAndDivideStages = [107, 117, 127, 131, 203, 207, 212];
+                let multiplyStages = [229];
+                let divideStages = [228];
+                let multiplyAndDivideStages = [];
+                let halfsStages = [];
+                let doublesStages = [];
+                let squaredStages = [208];
+                let squareRootStages = [209];
+                let cubedStages = [];
+                let cubeRouteStages = [];
+                let fractionsStages = [];
+                let factorsStages = [];
+                let modulusStages = [];
+                let percentStages = [];
+                let timesTableChoice = []; // The times table being tested, if more than one (e.g. 3s,6s,9s, then set to [3, 6, 9])
+
+                let randomisedStages = [102, 103, 105, 106, 107, 109, 110, 112, 113, 115, 116, 117, 119, 120, 122, 123, 125, 126, 127,129, 130, 131, 202, 203, 205, 206, 207, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228];
+
+                if (randomisedStages.includes(currentStage)) {
+                    isRandomised = 1;
+                } else {
+                    isRandomised = 0;
                 }
 
+                // First get the question type, as common operations happen for a given question type.
+                if (timesTableMultiplyStages.includes(currentStage)) {
+                    questionType = 'timesTableMultiply';
+                    isTimesTableStage = 1;
+                } else if (timesTableDivideStages.includes(currentStage)) {
+                    questionType = 'timesTableDivide';
+                    isTimesTableStage = 1;
+                } else if (timesTableMultiplyAndDivideStages.includes(currentStage)) {
+                    questionType = 'timesTableMultiplyAndDivide';
+                    isTimesTableStage = 1;
+                } else if (multiplyStages.includes(currentStage)) {
+                    questionType = 'multiply';
+                } else if (divideStages.includes(currentStage)) {
+                    questionType = 'divide';
+                } else if (multiplyAndDivideStages.includes(currentStage)) {
+                    questionType = 'multiplyAndDivide';
+                } else if (halfsStages.includes(currentStage)) {
+                    questionType = 'halfs';
+                } else if (doublesStages.includes(currentStage)) {
+                    questionType = 'doubles';
+                } else if (squaredStages.includes(currentStage)) {
+                    questionType = 'squared';
+                } else if (squareRootStages.includes(currentStage)) {
+                    questionType = 'squareRoot';
+                } else if (cubedStages.includes(currentStage)) {
+                    questionType = 'cubed';
+                } else if (cubeRouteStages.includes(currentStage)) {
+                    questionType = 'cubeRoot';
+                } else if (fractionsStages.includes(currentStage)) {
+                    questionType = 'fractions';
+                } else if (factorsStages.includes(currentStage)) {
+                    questionType = 'factors';
+                } else if (modulusStages.includes(currentStage)) {
+                    questionType = 'modulus';
+                } else if (percentStages.includes(currentStage)) {
+                    questionType = 'fractions';
+                }
+
+                if (isTimesTableStage) {
+                    //The selected stage is a times table question. Get the times table being tested.
+                    if ((currentStage == 101) || (currentStage ==102) || (currentStage == 103)) {
+                        timesTableChoice = [10];
+                    } else if ((currentStage == 104) || (currentStage == 105) || (currentStage == 106)) {
+                        timesTableChoice = [5];
+                    } else if  (currentStage == 107) {
+                        timesTableChoice = [5, 10];
+                    } else if  ((currentStage == 108) || (currentStage == 109) || (currentStage == 110)) {
+                        timesTableChoice = [2];
+                    } else if  ((currentStage == 111) || (currentStage == 112) || (currentStage == 113)) {
+                        timesTableChoice = [4];
+                    } else if  ((currentStage == 114) || (currentStage == 115) || (currentStage == 116)) {
+                        timesTableChoice = [8];
+                    } else if  (currentStage == 117) {
+                        timesTableChoice = [2, 4 ,8]
+                    } else if  ((currentStage == 118) || (currentStage == 119) || (currentStage == 120)) {
+                        timesTableChoice = [3];
+                    } else if  ((currentStage == 121) || (currentStage == 122) || (currentStage == 123)) {
+                        timesTableChoice = [6];
+                    } else if  ((currentStage == 124) || (currentStage == 125) || (currentStage == 126)) {
+                        timesTableChoice = [9];
+                    } else if  (currentStage == 127) {
+                        timesTableChoice = [3, 6, 9];
+                    } else if  ((currentStage == 128) || (currentStage == 129) || (currentStage == 130)) {
+                        timesTableChoice = [7];
+                    } else if  (currentStage == 131) {
+                        timesTableChoice = [2, 3, 4, 5, 6, 7, 8, 9, 10]
+                    } else if  ((currentStage == 201) || (currentStage == 202) || (currentStage == 203)) {
+                        timesTableChoice = [11];
+                    } else if  ((currentStage == 204) || (currentStage == 205) || (currentStage == 206)) {
+                        timesTableChoice = [12];
+                    } else if  (currentStage == 207) {
+                        timesTableChoice = [11, 12];
+                    } else if  ((currentStage == 210) || (currentStage == 211) || (currentStage == 212)) {
+                        timesTableChoice = [2,3,4,5,6,7,8,9,10,11,12];
+                    } else if  ((currentStage == 213) || (currentStage == 214)) {
+                        timesTableChoice = [50];
+                    } else if  ((currentStage == 215) || (currentStage == 216)) {
+                        timesTableChoice = [20];
+                    } else if  ((currentStage == 217) || (currentStage == 218)) {
+                        timesTableChoice = [40];
+                    } else if  ((currentStage == 219) || (currentStage == 220)) {
+                        timesTableChoice = [80];
+                    } else if  ((currentStage == 221) || (currentStage == 222)) {
+                        timesTableChoice = [30];
+                    } else if  ((currentStage == 223) || (currentStage == 224)) {
+                        timesTableChoice = [60];
+                    } else if  ((currentStage == 225) || (currentStage == 226)) {
+                        timesTableChoice = [90];
+                    } else if  ((currentStage == 227) || (currentStage == 228)) {
+                        timesTableChoice = [70];
+                    }
+                }
+
+                // For each stage work out the 1x10 array variables: num1, num2, symbol, ans, num1_quest, num2_quest              
+                // Questions appear as: 'num1_quest'   'symbol'   'num2_quest'
+
+                switch (questionType) {
+                    case 'timesTableMultiply':
+                        num1 = generateNumberArray(1, 10, 1); // Get an ordered list from 1 to 10 using generateNumberArray(start, end, step);
+                        num2 = randomChoices(timesTableChoice, 10); //Get a random list of 10 numbers from the times tables type selected
+                        if (isRandomised) {
+                            num1 = randomShuffle(num1);
+                        }
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    case 'timesTableDivide':
+                        num1 = generateNumberArray(1, 10, 1); // Get an ordered list from 1 to 10 using generateNumberArray(start, end, step);
+                        num2 = randomChoices(timesTableChoice, 10); //Get a random list of 10 numbers from the times tables type selected
+                        if (isRandomised) {
+                            num1 = randomShuffle(num1);
+                        }
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                            ans.push(num1[i] * num2[i]);
+                        }
+                        // currenlty coded as a multiply question, so need to switch the numbers over 
+                        let tempAns = ans;
+                        ans = num1;
+                        num1 = tempAns;
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+
+                    case 'timesTableMultiplyAndDivide':
+                        let isDivide = randomChoices([0, 1], 10); // get an array of 0s and 1s defining if the question will be a divide or a multiply question
+                        num1 = generateNumberArray(1, 10, 1); // Get an ordered list from 1 to 10 using generateNumberArray(start, end, step);
+                        num2 = randomChoices(timesTableChoice, 10); //Get a random list of 10 numbers from the times tables type selected
+                        
+                        if (isRandomised) {
+                            num1 = randomShuffle(num1);
+                        }   
+                        for (let i = 0; i < 10; i++) { // Runs 10 times to generate 10 questions 
+                            ans.push(num1[i] * num2[i]);
+                            if (isDivide[i]) {
+                                let tempAns = ans[i];
+                                ans[i] = num1[i];
+                                num1[i] = tempAns;
+                                symbol.push('\u00F7'); // '\u00F7' is the unicode 'divide' symbol
+                            } else {
+                                symbol.push('\u00D7'); // '\u00D7' is the unicode 'multiply' symbol
+                            }
+                        }        
+                        num1_quest = num1;
+                        num2_quest = num2;
+                        break;
+
+                    // case TODO: CODE FOR STAGE 208 (square numbers)
+
+                    // case TODO: CODE FOR STAGE 209 (square roots)
+
+                    // case TODO: CODE FOR STAGE 229 (2 and 3 digit x 10 & 100)
+
+                    // case TODO: CODE FOR STAGE 230 (2 and 3 digit / 10 & 100)
+
+                    }
 
                 realAnswers = ans;
                 return([num1_quest, symbol, num2_quest, ans]); 
-
             }
 
-            
+
             //function for generating an array of numbers with a 'start' 'end' and 'step'
             function generateNumberArray(start, end, step) {
                 let array = [];
-                for (var i = start; i <= end; i+step) {
+                //(let i = 0; i < k; i++){
+                for (let i = 1; i <= end; i=i+step) {
                     array.push(i);
                 }
                 return array
@@ -752,6 +418,23 @@
                 return newArray
             }
 
+            function doesQuestExist(num1ToTest, symbolToTest, num2ToTest, num1, symbol, num2) {
+            // TODO: Code this, currently in Python format
+            // Searches for common num1, symbol and num2 locations and returns the number of matches found.
+            // num1ToTest, symbolToTest and num2ToTest define the question to look for. 
+            // num1, symbol and num2 are lists defining the questions already in existance (those to search through).
+            // Returns the number of matches found.  If no matches, returns 0.
+
+                // num1RepeatsBool = [1 if num1ToTest==num1[i] else 0 for i in range(len(num1))]
+                // symbolRepeatsBool = [1 if symbolToTest==symbol[i] else 0 for i in range(len(num1))]
+                // num2RepeatsBool = [1 if num2ToTest==num2[i] else 0 for i in range(len(num1))]
+
+                // matches = [num1RepeatsBool[i]*num2RepeatsBool[i]*symbolRepeatsBool[i] for i in range(len(num1RepeatsBool))]
+                // matchCount = sum(matches)
+ 
+                // return matchCount
+            }
+
 
 
 
@@ -768,252 +451,248 @@
             }
         </style>
 
-
-        <!--Title-->
-        <h1 class="text-center white">Maths Challenge</h1>
-
         <div class="container">
+            <div class="row d-flex justify-content-center">
+                <!--Title-->
+                <h1 class="text-center white">Maths Challenge</h1>
+            </div>
             <div class="row" style="padding-bottom: 2%; padding-top: 2%;">
-                <div class="col-lg-4"></div>
-                <div class="col-lg-2">
-                    <!--Dropdown-->
-                    <div class="dropdown d-flex justify-content-center"></i>
-                        <select id="dropdown-menu" onchange="callback_changeStage()" style="text-align-last: center; color: white; background-color: #0275d8; min-width: 200px; min-height: 35px;">
-                            <option value="unselected" style="text-align-last: center;">Select Stage</option>
-                            <option value="101" style="text-align-last: center;">1.    10s in Order</option>
-                            <option value="102" style="text-align-last: center;">2.    10s mixed</option>
-                            <option value="103" style="text-align-last: center;">3.    10s division mixed</option>
-                            <option value="104" style="text-align-last: center;">4.    5s in Order</option>
-                            <option value="105" style="text-align-last: center;">5.    5s mixed</option>
-                            <option value="106" style="text-align-last: center;">6.    5s division mixed</option>
-                            <option value="107" style="text-align-last: center;">7.    10s and 5s mixed</option>
-                            <option value="108" style="text-align-last: center;">8.    2s in order</option>
-                            <option value="109" style="text-align-last: center;">9.    2s mixed</option>
-                            <option value="110" style="text-align-last: center;">10.   2s division mixed</option>
-                            <option value="111" style="text-align-last: center;">11.   4s in order</option>
-                            <option value="112" style="text-align-last: center;">12.   4s mixed</option>
-                            <option value="113" style="text-align-last: center;">13.   4s division mixed</option>
-                            <option value="114" style="text-align-last: center;">14.   8s in order</option>
-                            <option value="115" style="text-align-last: center;">15.   8s mixed</option>
-                            <option value="116" style="text-align-last: center;">16.   8s division mixed</option>
-                            <option value="117" style="text-align-last: center;">17.   2, 4, 8s mixed</option>
-                            <option value="118" style="text-align-last: center;">18.   3s in order</option>
-                            <option value="119" style="text-align-last: center;">19.   3s mixed</option>
-                            <option value="120" style="text-align-last: center;">20.   3s division mixed</option>
-                            <option value="121" style="text-align-last: center;">21.   6s in order</option>
-                            <option value="122" style="text-align-last: center;">22.   6s mixed</option>
-                            <option value="123" style="text-align-last: center;">23.   6s division mixed</option>
-                            <option value="124" style="text-align-last: center;">24.   9s in order</option>
-                            <option value="125" style="text-align-last: center;">25.   9s mixed</option>
-                            <option value="126" style="text-align-last: center;">26.   9s division mixed</option>
-                            <option value="127" style="text-align-last: center;">27.   3, 6, 9s mixed</option>
-                            <option value="128" style="text-align-last: center;">28.   7s in order</option>
-                            <option value="129" style="text-align-last: center;">29.   7s mixed</option>
-                            <option value="130" style="text-align-last: center;">30.   7s division mixed</option>
-                            <option value="131" style="text-align-last: center;">31.   2s - 10s mixed</option>
-                            
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-2">
+                <!--Dropdown-->
+                <div class="dropdown container d-flex justify-content-center">
+                    <select id="dropdown-menu" onchange="callback_changeStage()" style="text-align-last: center; color: white; background-color: #0275d8; min-width: 200px; min-height: 35px; max-height: 35px;">
+                        <option value="unselected" style="text-align-last: center;">Select Stage</option>
+                        <option value="101" style="text-align-last: center;">1.    10s in Order</option>
+                        <option value="102" style="text-align-last: center;">2.    10s mixed</option>
+                        <option value="103" style="text-align-last: center;">3.    10s division mixed</option>
+                        <option value="104" style="text-align-last: center;">4.    5s in Order</option>
+                        <option value="105" style="text-align-last: center;">5.    5s mixed</option>
+                        <option value="106" style="text-align-last: center;">6.    5s division mixed</option>
+                        <option value="107" style="text-align-last: center;">7.    10s and 5s mixed</option>
+                        <option value="108" style="text-align-last: center;">8.    2s in order</option>
+                        <option value="109" style="text-align-last: center;">9.    2s mixed</option>
+                        <option value="110" style="text-align-last: center;">10.   2s division mixed</option>
+                        <option value="111" style="text-align-last: center;">11.   4s in order</option>
+                        <option value="112" style="text-align-last: center;">12.   4s mixed</option>
+                        <option value="113" style="text-align-last: center;">13.   4s division mixed</option>
+                        <option value="114" style="text-align-last: center;">14.   8s in order</option>
+                        <option value="115" style="text-align-last: center;">15.   8s mixed</option>
+                        <option value="116" style="text-align-last: center;">16.   8s division mixed</option>
+                        <option value="117" style="text-align-last: center;">17.   2, 4, 8s mixed</option>
+                        <option value="118" style="text-align-last: center;">18.   3s in order</option>
+                        <option value="119" style="text-align-last: center;">19.   3s mixed</option>
+                        <option value="120" style="text-align-last: center;">20.   3s division mixed</option>
+                        <option value="121" style="text-align-last: center;">21.   6s in order</option>
+                        <option value="122" style="text-align-last: center;">22.   6s mixed</option>
+                        <option value="123" style="text-align-last: center;">23.   6s division mixed</option>
+                        <option value="124" style="text-align-last: center;">24.   9s in order</option>
+                        <option value="125" style="text-align-last: center;">25.   9s mixed</option>
+                        <option value="126" style="text-align-last: center;">26.   9s division mixed</option>
+                        <option value="127" style="text-align-last: center;">27.   3, 6, 9s mixed</option>
+                        <option value="128" style="text-align-last: center;">28.   7s in order</option>
+                        <option value="129" style="text-align-last: center;">29.   7s mixed</option>
+                        <option value="130" style="text-align-last: center;">30.   7s division mixed</option>
+                        <option value="131" style="text-align-last: center;">31.   2s - 10s mixed</option>
+                        
+                    </select>
                     <!--Go button-->
-                    <div class="container-fluid d-flex justify-content-center">
-                        <button class="btn btn-primary" type="submit" id="goButton" style="margin-top: 5%;">Go!</button>
+                    <button class="btn btn-primary" type="submit" id="goButton" style="margin-left: 3%;">Go!</button>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <!--Table for challenge-->
+                <div class="container-fluid">          
+                    <div class="d-flex justify-content-center">
+                        <table class="table w-25">
+                            <thead>
+                            <tr>
+                                <th scope="col" style="width: 24%">Number</th>
+                                <th scope="col" style="width: 24%">Question</th>
+                                <th scope="col" style="width: 28%">Your Answer</th>
+                                <th scope="col" style="width: 24%">Marks</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <!--Row one-->
+                            <tr>
+                                <th scope="row" class="table-element">1</th>
+                                <td id="q1" class="table-element"></td>
+                                <td>
+                                    <input type="tel" class=" table-element form-control" id="inputAnswer1" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <input class="table-element form-control" id ="mark1" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+
+                            
+                            <!--Row two-->
+                            <tr>
+                                <th scope="row">2</th>
+                                <td id="q2"></td>
+                                <td>
+                                    <input type="tel" class="form-control" id="inputAnswer2" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <!--style="background-color: #cccccc;"-->
+                                            <input class="form-control" id ="mark2" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+
+                            <!--Row three-->
+                            <tr>
+                                <th scope="row">3</th>
+                                <td id="q3"></td>
+                                <td>
+                                    <input type="tel" class="form-control" id="inputAnswer3" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <input class="form-control" id="mark3" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+                            <!--Row four-->
+                            <tr>
+                                <th scope="row">4</th>
+                                <td id="q4"></td>
+                                <td>
+                                    <input type="tel" class="form-control" id="inputAnswer4" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <input class="form-control" id ="mark4" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+
+                            <!-- TAB-Index: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex-->
+
+                            
+                            <!--Row five-->
+                            <tr>
+                                <th scope="row">5</th>
+                                <td id="q5"></td>
+                                <td>
+                                    <input type="tel" class="form-control" id="inputAnswer5" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <input class="form-control" id ="mark5" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+
+                            <!--Row six-->
+                            <tr>
+                                <th scope="row">6</th>
+                                <td id="q6"></td>
+                                <td>
+                                    <input type="tel" class="form-control" id="inputAnswer6" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <input class="form-control" id="mark6" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+                            <!--Row seven-->
+                            <tr>
+                                <th scope="row">7</th>
+                                <td id="q7"></td>
+                                <td>
+                                    <input type="tel" class="form-control" id="inputAnswer7" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <input class="form-control" id ="mark7" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+
+                            <!--Row eight-->
+                            <tr>
+                                <th scope="row">8</th>
+                                <td id="q8"></td>
+                                <td>
+                                    <input type="tel" class="form-control" id="inputAnswer8" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <input class="form-control" id="mark8" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+                            <!--Row nine-->
+                            <tr>
+                                <th scope="row">9</th>
+                                <td id="q9"></td>
+                                <td>
+                                    <input type="tel" class="form-control" id="inputAnswer9" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <input class="form-control" id ="mark9" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+
+                            
+                            <!--Row ten-->
+                            <tr>
+                                <th scope="row">10</th>
+                                <td id="q10"></td>
+                                <td>
+                                    <input type="tel" class="form-control" id="inputAnswer10" tabindex="0">
+                                </td>
+                                <td>
+                                    <fieldset disabled>
+                                        <div>
+                                            <input class="form-control" id ="mark10" style="background-color: #cccccc;">
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+
+                            <!--Results-->
+                            <tr>
+                                <th scope="row"></th>
+                                <td><p id="resultTime">seconds</p></td>
+                                <td></td>
+                                <td>
+                                    <p id="resultScore">/ 10</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--Table for challenge-->
-        <div class="container-fluid">          
-            <div class="d-flex justify-content-center">
-                <table class="table w-25">
-                    <thead>
-                    <tr>
-                        <th scope="col" style="width: 24%">Number</th>
-                        <th scope="col" style="width: 24%">Question</th>
-                        <th scope="col" style="width: 28%">Your Answer</th>
-                        <th scope="col" style="width: 24%">Marks</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <!--Row one-->
-                    <tr>
-                        <th scope="row" class="table-element">1</th>
-                        <td id="q1" class="table-element"></td>
-                        <td>
-                            <input type="tel" class=" table-element form-control" id="inputAnswer1" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                    <input class="table-element form-control" id ="mark1" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-
-                    
-                    <!--Row two-->
-                    <tr>
-                        <th scope="row">2</th>
-                        <td id="q2"></td>
-                        <td>
-                            <input type="tel" class="form-control" id="inputAnswer2" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                     <!--style="background-color: #cccccc;"-->
-                                    <input class="form-control" id ="mark2" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-
-                    <!--Row three-->
-                    <tr>
-                        <th scope="row">3</th>
-                        <td id="q3"></td>
-                        <td>
-                            <input type="tel" class="form-control" id="inputAnswer3" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                    <input class="form-control" id="mark3" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <!--Row four-->
-                    <tr>
-                        <th scope="row">4</th>
-                        <td id="q4"></td>
-                        <td>
-                            <input type="tel" class="form-control" id="inputAnswer4" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                    <input class="form-control" id ="mark4" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-
-                    <!-- TAB-Index: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex-->
-
-                    
-                    <!--Row five-->
-                    <tr>
-                        <th scope="row">5</th>
-                        <td id="q5"></td>
-                        <td>
-                            <input type="tel" class="form-control" id="inputAnswer5" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                    <input class="form-control" id ="mark5" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-
-                    <!--Row six-->
-                    <tr>
-                        <th scope="row">6</th>
-                        <td id="q6"></td>
-                        <td>
-                            <input type="tel" class="form-control" id="inputAnswer6" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                    <input class="form-control" id="mark6" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <!--Row seven-->
-                    <tr>
-                        <th scope="row">7</th>
-                        <td id="q7"></td>
-                        <td>
-                            <input type="tel" class="form-control" id="inputAnswer7" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                    <input class="form-control" id ="mark7" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-
-                    <!--Row eight-->
-                    <tr>
-                        <th scope="row">8</th>
-                        <td id="q8"></td>
-                        <td>
-                            <input type="tel" class="form-control" id="inputAnswer8" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                    <input class="form-control" id="mark8" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <!--Row nine-->
-                    <tr>
-                        <th scope="row">9</th>
-                        <td id="q9"></td>
-                        <td>
-                            <input type="tel" class="form-control" id="inputAnswer9" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                    <input class="form-control" id ="mark9" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-
-                    
-                    <!--Row ten-->
-                    <tr>
-                        <th scope="row">10</th>
-                        <td id="q10"></td>
-                        <td>
-                            <input type="tel" class="form-control" id="inputAnswer10" tabindex="0">
-                        </td>
-                        <td>
-                            <fieldset disabled>
-                                <div>
-                                    <input class="form-control" id ="mark10" style="background-color: #cccccc;">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-
-                    <!--Results-->
-                    <tr>
-                        <th scope="row"></th>
-                        <td><p id="resultTime">seconds</p></td>
-                        <td></td>
-                        <td>
-                            <p id="resultScore">/ 10</p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        
 
             <!--Mark it button-->
         <div class="container-fluid d-flex justify-content-center">
@@ -1031,114 +710,3 @@
 
     </footer>
 </html>
-
-     <!--<script>
-            alert("hello");
-            //Go! Button Code
-            window.onload = (event) => {
-                    addClickListeners();
-            };
-    
-            function addClickListeners() {
-                let button = document.getElementById("goButton");
-                button.addEventListener("click", alert('helloooo'));
-            }
-    
-            //What stage, do function for that stage.
-    
-    
-    
-    
-                // pick a random number given min and max number, a useful function
-            function pickOneNums(minNum, maxNum) {
-                let numOne = Math.floor((Math.random() * maxNum) + minNum);
-                return numOne
-            }
-    
-                //Code to see/show what stage has been selected
-                let something = document.getElementById("stageDropdown");
-                function show(){
-                    var as = document.forms[0].ddlViewBy.value;
-                    var strUser = e.options[e.selectedIndex].value;
-                    console.log(as, strUser);
-                }
-                    e.onchange=show;
-                    show();
-    
-            //Change questions for stage on go.
-            //we pick one number, then a symbol and then a number.
-            //
-    
-            function changeValue() {
-                var numOneList = numOne(1,9)
-                let numOneList = [1, 2, 3, 4];
-                document.getElementById("q1").innerHTML = "9"; //numOneList[0]+str(symbol())+numTwo(1,9);
-                document.getElementById("q2").innerHTML = "New text!";
-                document.getElementById("q3").innerHTML = numTwo(1,9);
-            }
-            
-            //funtion for pick first number
-            function numOne(minNum, maxNum) {
-                let numOne = Math.floor((Math.random() * maxNum) + minNum);
-            return numOne
-            }
-            //function for picking second number
-            function numTwo(minNum, maxNum) {
-                let numTwo = Math.floor((Math.random() * maxNum) + minNum);
-            return numTwo
-            }
-            //function for picking symbol
-            function symbol() {
-                let symbol = Math.floor((Math.random() * 0) + 5)
-                if (symbol = 1) {
-                    let symbol = '+'
-                } else if (symbol = 2) {
-                    let symbol = '-'
-                } else if (symbol = 3) {
-                    let symbol = '*'
-                } else if (symbol = 4) {
-                    let symbol = '/'
-                }
-    
-                return symbol
-            }     
-            
-            
-            
-        //[1, 2, 3].includes(2); //code example to see if an entry is in an array
-        // let a = randomChoices([3],9);
-
-//                if (currentStage == 'stageTwo') {
-//                    let listQA = []
-//                    for (let i = 0; i < 10; i++){
-//                        // Runs 10 times
-//                       listQA.push(pickTwoNumsOrdered(10,i+1));
-//                    }
-//                    listQA = randomShuffle(listQA);
-//                    return(listQA)
-//                }
-
-/*
-            //function for picking symbol
-            function symbol() {
-                let symbol = Math.floor((Math.random() * 0) + 5);
-                if (symbol = 1) {
-                    let symbol = '+';
-                } else if (symbol = 2) {
-                    let symbol = '-';
-                } else if (symbol = 3) {
-                    let symbol = '*';
-                } else if (symbol = 4) {
-                    let symbol = '/';
-                }
-    
-                return symbol
-            }
-*/
-    
-        </script>-->
-
-
-        
-      
-    
