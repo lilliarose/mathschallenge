@@ -68,7 +68,7 @@
                     return                   
                 } 
                 // Clear the time taken from previous go
-                document.getElementById('resultTime').innerHTML = ' seconds'
+                document.getElementById('resultTime').innerHTML = ''
                 document.getElementById('resultScore').innerHTML = '/ 10'
 
                 // Make 'GO!'' button active and set focus to the 'GO!' button, make 'Mark it' disabled 
@@ -97,7 +97,7 @@
                 buttonMarkIt.disabled = false;
 
                 // Clear the time taken from previous go
-                document.getElementById('resultTime').innerHTML = ' seconds'
+                document.getElementById('resultTime').innerHTML = ''
                 document.getElementById('resultScore').innerHTML = '/ 10'
 
                 // Get the question text and answers
@@ -137,7 +137,7 @@
                 
                 // Find and display the time taken 
                 let timerEnd = new Date();
-                document.getElementById('resultTime').innerHTML = Math.round((timerEnd.getTime()-timerStart.getTime())/1000) + ' seconds'
+                document.getElementById('resultTime').innerHTML = Math.round((timerEnd.getTime()-timerStart.getTime())/1000) + ' secs'
                 document.getElementById('resultScore').innerHTML = correctAnswers + ' / 10'
 
                 // Set focus to the GO! button
@@ -513,10 +513,10 @@
                 <table class="table w-25" style="transform: translate(-50%,0); position: absolute; left: 50%;">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 24%">Number</th>
-                            <th scope="col" style="width: 24%">Question</th>
-                            <th scope="col" style="width: 28%">Your Answer</th>
-                            <th scope="col" style="width: 24%">Marks</th>
+                            <th scope="col" style="width: 15%"></th>
+                            <th scope="col" style="width: 30%">Question</th>
+                            <th scope="col" style="width: 25%">Your Answer</th>
+                            <th scope="col" style="width: 25%">Marks</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -685,7 +685,7 @@
                         <!--Results-->
                         <tr>
                             <th scope="row"></th>
-                            <td><p id="resultTime">seconds</p></td>
+                            <td><p id="resultTime"></p></td>
                             <td></td>
                             <td>
                                 <p id="resultScore">/ 10</p>
@@ -695,7 +695,7 @@
                     </table>
                 </table>
             </div>
-            <div id="spacer" style="width: 200px; height: 600px; margin-right:0px;"></div>
+            <div id="spacer" style="width: 200px; height: 620px; margin-right:0px;"></div>
             <div class="row">
                 <!--Mark it button-->
                 <div class="container-fluid d-flex justify-content-center">
