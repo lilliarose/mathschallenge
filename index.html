@@ -25,14 +25,168 @@
             const question_id = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10']
             const userAnswer_id = ['inputAnswer1','inputAnswer2','inputAnswer3','inputAnswer4','inputAnswer5','inputAnswer6','inputAnswer7','inputAnswer8','inputAnswer9','inputAnswer10']
             const mark_id = ['mark1','mark2','mark3','mark4','mark5','mark6','mark7','mark8','mark9','mark10']
+            let currentLevel = 'bronze'; // the level (bronze, silver, gold, platinum) currently selected
 
-            //called when window loads
+            // Bronze Award stages
+            let levelBronzeID = [101,102,103,104,105,106,107,108,109,110,
+                                111,112,113,114,115,116,117,118,119,120,
+                                121,122,123,124,125,126,127,128,129,130,131];
+
+            let levelBronzeText = ['1.    10s in order',
+                                    '2.    10s mixed',
+                                    '3.    10s division mixed',
+                                    '4.    5s in order',
+                                    '5.    5s mixed',
+                                    '6.    5s division mixed',
+                                    '7.    10s and 5s mixed',
+                                    '8.    2s in order',
+                                    '9.    2s mixed',
+                                    '10.  2s divison mixed',
+                                    '11.  4s in order',
+                                    '12.  4s mixed',
+                                    '13.  4s division mixed',
+                                    '14.  8s in order',
+                                    '15.  8s mixed',
+                                    '16.  8s division mixed',
+                                    '17.  2, 4, 8s mixed ',
+                                    '18.  3s in order',
+                                    '19.  3s mixed',
+                                    '20.  3s division',
+                                    '21.  6s in order',
+                                    '22.  6s mixed',
+                                    '23.  6s division mixed',
+                                    '24.  9s in order',
+                                    '25.  9s mixed',
+                                    '26.  9s division mixed',
+                                    '27.  3, 6, 9s mixed',
+                                    '28.  7s in order',
+                                    '29.  7s mixed',
+                                    '30.  7s division mixed',
+                                    '31.  2s - 10s mixed'];
+
+            // Silver Award Stages
+            let levelSilverID = [201,202,203,204,205,206,207,208,209,210,
+                                211,212,213,214,215,216,217,218,219,220,
+                                221,222,223,224,225,226,227,228,229,230];
+                                
+            let levelSilverText = ['1. 11s in order',
+                                    '2. 11s mixed',
+                                    '3. 11s division mixed',
+                                    '4. 12s in order',
+                                    '5. 12s mixed',
+                                    '6. 12s division mixed',
+                                    '7. 11s and 12s mixed (\u00D7 & \u00F7)',
+                                    '8. Square numbers',
+                                    '9.  Square roots',
+                                    '10. All tables mixed \u00D7',
+                                    '11. All tables mixed \u00F7',
+                                    '12. All tables mixed (\u00D7 & \u00F7)',
+                                    '13. U \u00D7 50',
+                                    '14. Multiples of 50 \u00F7 50',
+                                    '15. U \u00D7 20',
+                                    '16. Multiples of 20 \u00F7 20',
+                                    '17. U \u00D7 40',
+                                    '18. Multiples of 40 \u00F7 40',
+                                    '19. U \u00D7 80',
+                                    '20. Multiples of 80 \u00F7 80',
+                                    '21. U \u00D7 30',
+                                    '22. Multiples of 30 \u00F7 30',
+                                    '23. U \u00D7 60',
+                                    '24. Multiples of 60 \u00F7 60',
+                                    '25. U \u00D7 90',
+                                    '26. Multiples of 90 \u00F7 90',
+                                    '27. U \u00D7 70',
+                                    '28. Multiples of 70 \u00F7 70',
+                                    '29. 2 & 3 digit \u00D7 10 & 100',
+                                    '30. 2 & 3 digit \u00F7 10 & 100'];
+
+            // Gold Award Stages
+            let levelGoldID = [301,302,303,304,305,306,307,308,309,310,
+                                311,312,313,314,315,316,317,318,319,320,
+                                321,322,323,324,325,326,327,328,329,330];
+
+            let levelGoldText = ['1. Factors',
+                                '2. Double integers up to 100',
+                                '3. \u00BD evens up to 100',
+                                '4. \u00BD odds up to 50',
+                                '5. Double integers up to 200',
+                                '6. Double integers up to 500',
+                                '7. Unit fractions of amounts',
+                                '8. Fractions of amounts',
+                                '9. Double decimals \u003C 1 with 2dp',
+                                '10. \u00BD decimals \u003C 10 containing 10ths ',
+                                '11. Double decimals \u003C 25 with 2dp',
+                                '12. Double  multiples of 10 (\u003C1000)',
+                                '13. \u00BD multiples of 10 (\u003C1000)',
+                                '14. Double multiples of 10 (\u003C10,000)',
+                                '15. \u00BD multiples of 10 (\u003C10,000)',
+                                '16. Multiples of 10 squared',
+                                '17. 2 digit \u00D7 4',
+                                '18. 2 digit \u00F7 4',
+                                '19. 15 times tables (\u00D7 and \u00F7)',
+                                '20. 16 times tables (\u00D7 and \u00F7)',
+                                '21. 18 times tables (\u00D7 and \u00F7)',
+                                '22. 14 times tables (\u00D7 and \u00F7)',
+                                '23. 13 times tables (\u00D7 and \u00F7)',
+                                '24. 19 times tables (\u00D7 and \u00F7)',
+                                '25. 17 times tables (\u00D7 and \u00F7)',
+                                '26. 2 digit multiply by 4, 6, 8',
+                                '27. 2 digit multiply by 3, 7, 9',
+                                '28. 2 digit number \u003C 50 \u00D7 U',
+                                '29. Decimal \u003C 5 (1dp) \u00D7 U',
+                                '30. Decimal \u003C 10 (1dp) \u00D7 U'];
+
+            // Platinum Award Stages
+            let levelPlatinumID = [401,402,403,404,405,406,407,408,409,410,
+                                411,412,413,414,415,416,417,418,419,420,
+                                421,422,423,424,425,426,427,428,429,430];
+            
+            let levelPlatinumText = ['1. TU \u00D7 25',
+                                    '2. TU \u00D7 50',
+                                    '3. TU \u00D7 20',
+                                    '4. TU \u00D7 40',
+                                    '5. TU \u00D7 80',
+                                    '6. TU \u00D7 30',
+                                    '7. TU \u00D7 60',
+                                    '8. TU \u00D7 90',
+                                    '9. TU \u00D7 70',
+                                    '10. Doubling 5 dig. to 2 d.p. < 200',
+                                    '11. Halving 3 dig. odd nos. < 200',
+                                    '12. Halving 3 dig. odd nos. > 200',
+                                    '13. 5/ 6 dig. nos. to 2 d.p. \u00D7 U',
+                                    '14. Halving 5 dig. to 2 d.p. < 200',
+                                    '15. 6 dig. nos. to 3 d.p.\u00D7 U',
+                                    '16. Halving 5 dig.nos. to 1 d.p.',
+                                    '17. Doubling 5 dig. to 2 d.p. > 200',
+                                    '18. Halving 5 dig. to 2 d.p. > 200',
+                                    '19. 3 dig. nos. \u00F7 4',
+                                    '20. 4 dig. nos.  to 1 d.p. \u00F7 4',
+                                    '21. 4 dig. nos. < 10000 \u00F7 U',
+                                    '22. HTU \u00D7 TU ',
+                                    '23. 5 dig. to 2 d.p. \u00D7 3',
+                                    '24. 4/5 dig. nos. to 1 d.p. \u00F7 3',
+                                    '25. Factorials',
+                                    '26. mod (remainder after division)',
+                                    '27. 3 dig. nos. squared',
+                                    '28. 2 dig. nos. cubed',
+                                    '29. Cube roots (\u221B)',
+                                    '30. Percentge of decimals'];
+
+             //called when window loads
             function addClickListeners() {
                 //go button click listener
                 let button = document.getElementById("goButton");
                 button.addEventListener("click", callback_goButton);
                 let markIt = document.getElementById("markIt");
                 markIt.addEventListener("click", callback_markIt);
+                let buttonBronze = document.getElementById("buttonBronze");
+                buttonBronze.addEventListener("click", callback_buttonBronze);
+                let buttonSilver = document.getElementById("buttonSilver");
+                buttonSilver.addEventListener("click", callback_buttonSilver);
+                let buttonGold = document.getElementById("buttonGold");
+                buttonGold.addEventListener("click", callback_buttonGold);
+                let buttonPlatinum = document.getElementById("buttonPlatinum");
+                buttonPlatinum.addEventListener("click", callback_buttonPlatinum);
                 //markIt.disabled = true;
 
                 // TODO: Add buttons for  bronze, silver, gold, platinum stages
@@ -48,6 +202,112 @@
                 // TODO: populate dropdown list with appropriate strings of stage types on cliking of button
                 
                 // TODO: code the getQuestions function for each stage added
+            }
+
+            function callback_buttonBronze () {
+                if (getCurrentLevel() == 'bronze') {
+                    //return
+                }
+                
+                let numStages = getCurrentStagesPerLevel();
+                let stagesDropDown = document.getElementById("dropdown-menu");
+                //Now remove the menu items one at a time until only the 'select stage' item remains
+                for (let i = 0; i < numStages; i++) {
+                    stagesDropDown.remove(1); // remove the menu item just after the 'select stage' text item
+                }
+
+                // From https://softauthor.com/javascript-dynamic-html-select-drop-down/
+                let listLength = levelBronzeID.length
+                // Fill up the dropdown with the value and text for each stage of the bronze level
+                for (let i = 0; i < listLength; i++) {
+                    let option = document.createElement("option");
+                    option.setAttribute('value', levelBronzeID[i]);
+                    let optionText = document.createTextNode(levelBronzeText[i]);
+                    option.appendChild(optionText);
+                    stagesDropDown.appendChild(option);   
+                }
+                
+                currentLevel = 'bronze';
+            }
+
+            function callback_buttonSilver () {
+                if (getCurrentLevel() == 'silver') {
+                    //return
+                }
+                
+                let numStages = getCurrentStagesPerLevel();
+                let stagesDropDown = document.getElementById("dropdown-menu");
+                //Now remove the menu items one at a time until only the 'select stage' item remains
+                for (let i = 0; i < numStages; i++) {
+                    stagesDropDown.remove(1); // remove the menu item just after the 'select stage' text item
+                }
+
+                // From https://softauthor.com/javascript-dynamic-html-select-drop-down/
+                let listLength = levelSilverID.length
+                // Fill up the dropdown with the value and text for each stage of the bronze level
+                for (let i = 0; i < listLength; i++) {
+                    let option = document.createElement("option");
+                    option.setAttribute('value', levelSilverID[i]);
+                    let optionText = document.createTextNode(levelSilverText[i]);
+                    option.appendChild(optionText);
+                    stagesDropDown.appendChild(option);   
+                }
+                
+                currentLevel = 'silver';
+
+            }
+
+            function callback_buttonGold () {
+                if (getCurrentLevel() == 'gold') {
+                    //return
+                }
+                
+                let numStages = getCurrentStagesPerLevel();
+                let stagesDropDown = document.getElementById("dropdown-menu");
+                //Now remove the menu items one at a time until only the 'select stage' item remains
+                for (let i = 0; i < numStages; i++) {
+                    stagesDropDown.remove(1); // remove the menu item just after the 'select stage' text item
+                }
+
+                // From https://softauthor.com/javascript-dynamic-html-select-drop-down/
+                let listLength = levelGoldID.length
+                // Fill up the dropdown with the value and text for each stage of the bronze level
+                for (let i = 0; i < listLength; i++) {
+                    let option = document.createElement("option");
+                    option.setAttribute('value', levelGoldID[i]);
+                    let optionText = document.createTextNode(levelGoldText[i]);
+                    option.appendChild(optionText);
+                    stagesDropDown.appendChild(option);   
+                }
+                
+                currentLevel = 'gold';
+
+            }
+
+            function callback_buttonPlatinum () {
+                if (getCurrentLevel() == 'platinum') {
+                    //return
+                }
+                
+                let numStages = getCurrentStagesPerLevel();
+                let stagesDropDown = document.getElementById("dropdown-menu");
+                //Now remove the menu items one at a time until only the 'select stage' item remains
+                for (let i = 0; i < numStages; i++) {
+                    stagesDropDown.remove(1); // remove the menu item just after the 'select stage' text item
+                }
+
+                // From https://softauthor.com/javascript-dynamic-html-select-drop-down/
+                let listLength = levelPlatinumID.length
+                // Fill up the dropdown with the value and text for each stage of the bronze level
+                for (let i = 0; i < listLength; i++) {
+                    let option = document.createElement("option");
+                    option.setAttribute('value', levelPlatinumID[i]);
+                    let optionText = document.createTextNode(levelPlatinumText[i]);
+                    option.appendChild(optionText);
+                    stagesDropDown.appendChild(option);   
+                }
+
+                currentLevel = 'platinum';
             }
 
             //called when dropdown list is changed
@@ -120,6 +380,44 @@
             function getCurrentStage() {
                 let currentStage = document.getElementById("dropdown-menu").value;
                 return(currentStage)
+            }
+
+            function getCurrentLevel() {
+                if (getCurrentStage() > 100 && getCurrentStage() < 200) {
+                    currentLevel = 'bronze';
+                } else if (getCurrentStage() > 200 && getCurrentStage() < 300) {
+                    currentLevel = 'silver';
+                } else if (getCurrentStage() > 300 && getCurrentStage() < 400) {
+                    currentLevel = 'gold';
+                } else if (getCurrentStage() > 400 && getCurrentStage() < 500) {
+                    currentLevel = 'platinum';
+                } else {
+                    currentLevel = 'bronze'; // default on first loading
+                }
+                return(currentLevel)
+            }
+
+            function getCurrentStagesPerLevel() {
+                let stagesPerLevel
+                if (getCurrentLevel() == 'bronze') {
+                    stagesPerLevel = levelBronzeID.length;
+                } else if (getCurrentLevel() == 'silver') {
+                    stagesPerLevel = levelSilverID.length;
+                } else if (getCurrentLevel() == 'gold') {
+                    stagesPerLevel = levelGoldID.length;
+                } else if (getCurrentLevel() == 'platinum') {
+                    stagesPerLevel = levelPlatinumID.length;
+                }
+                return(stagesPerLevel)
+            }
+
+            function getNumStages() {
+                let NumStages;
+                
+                if (getCurrentLevel() == 'bronze') {
+                    numStages = levelBronzeID.length
+
+                }
             }
 
             function callback_markIt() {
@@ -463,9 +761,9 @@
                 // Gold #D4AF37
                 // Platinum  #E5E4E2 -->
                 <button class="btn btn-primary" type="submit" id="buttonBronze" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #CD7F32; border: #CD7F32;">Bronze</button>
-                <button class="btn btn-primary" type="submit" id="buttonBronze" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #C0C0C0; border: #C0C0C0;">Silver</button>
-                <button class="btn btn-primary" type="submit" id="buttonBronze" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #D4AF37; border: #D4AF37;">Gold</button>
-                <button class="btn btn-primary" type="submit" id="buttonBronze" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #E5E4E2; border: #E5E4E2;">Platinum</button>
+                <button class="btn btn-primary" type="submit" id="buttonSilver" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #C0C0C0; border: #C0C0C0;">Silver</button>
+                <button class="btn btn-primary" type="submit" id="buttonGold" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #D4AF37; border: #D4AF37;">Gold</button>
+                <button class="btn btn-primary" type="submit" id="buttonPlatinum" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #E5E4E2; border: #E5E4E2;">Platinum</button>
             </div>
             <!--Dropdown--> <!--Go button-->
             <div class="row" style="padding-bottom: 2%; padding-top: 2%;">
