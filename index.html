@@ -1413,6 +1413,13 @@
                 <button class="btn btn-primary" type="submit" id="buttonGold" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #D4AF37; border-color: #919191;">Gold</button>
                 <button class="btn btn-primary" type="submit" id="buttonPlatinum" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #e0dfdc; border-color: #919191;">Platinum</button>
             </div>
+            <style>
+                @media (max-width: 1000px) {
+                    table {
+                        min-width: 300px;
+                    }
+                }
+            </style>
             <!--Dropdown--> <!--Go button-->
             <div class="row" style="padding-bottom: 2%; padding-top: 2%;">
                 <div class="dropdown container d-flex justify-content-center">
@@ -1424,7 +1431,7 @@
             </div>
             <!--Table for challenge-->
             <div class="row d-flex justify-content-center">
-                <table class="table w-25" style="transform: translate(-50%,0); position: absolute; left: 50%;">
+                <table class="table" style="width: 25%; transform: translate(-50%,0); position: absolute; left: 50%;">
                     <thead>
                         <tr>
                             <th scope="col" style="width: 15%"></th>
