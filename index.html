@@ -380,12 +380,8 @@
                 document.getElementById('resultTime').innerHTML = Math.round((timerEnd.getTime()-timerStart.getTime())/1000) + ' secs'
                 document.getElementById('resultScore').innerHTML = correctAnswers + ' / 10'
 
-                // Set focus to the GO! button
-                // CODE THIS (not sure we need to)
-
             }
                   
-            // TODO: code the getQuestions function for each stage added.
             // Uses current stage to get questions, question text, and answers
             function getQuestions() {
 
@@ -422,8 +418,9 @@
                 let cubeRootStages = [429];
                 let fractionsStages = [307, 308];
                 let factorsStages = [301];
-                let modulusStages = [];
-                let percentStages = [];
+                let modulusStages = [426];
+                let percentStages = [430];
+                let factorialStages = [425];
                 let timesTableChoice = []; // The times table being tested, if more than one (e.g. 3s,6s,9s, then set to [3, 6, 9])
 
                 let inOrderStages = [101, 104, 108, 111, 114, 118, 121, 124, 128, 201, 204];
@@ -470,6 +467,8 @@
                     questionType = 'modulus';
                 } else if (percentStages.includes(currentStage)) {
                     questionType = 'percent';
+                } else if (factorialStages.includes(currentStage)) {
+                    questionType = 'factorial';
                 }
 
                 if (isTimesTableStage) {
@@ -734,14 +733,16 @@
                             break;
                             
                             case 326: //2 digit multiply by 4, 6, 8
-                            //TODO Remove multipls of 10 numbers
-                                num1 = getRandomNumbers(11, 99, 0, 10); // get 10 2 digit numbers
-                                num2 = randomChoices([4, 6, 8],10); // choose 10 from 4, 6, 8
+                                num1 = generateNumberArray(10,99,1); // The list of possible num1 options
+                                num1 = deleteNthElements(num1, 10); // remove all numbers ending in 0 so no easy questions
+                                num1 = randomSample(num1, 10); // select 10 from the options, not repeated.
+                                num2 = randomChoices([4, 6, 8], 10); // choose 10 from 4, 6, 8
                             break;
                             
                             case 327: //2 digit multiply by 3, 7, 9
-                            //TODO Remove multipls of 10 numbers
-                                num1 = getRandomNumbers(11, 99, 0, 10); // get 10 2 digit numbers
+                                num1 = generateNumberArray(10,99,1); // The list of possible num1 options
+                                num1 = deleteNthElements(num1, 10); // remove all numbers ending in 0 so no easy questions
+                                num1 = randomSample(num1, 10); // select 10 from the options, not repeated.
                                 num2 = randomChoices([3, 7, 9],10); // choose 10 from 3, 7, 9
                             break;
                             
@@ -1215,6 +1216,61 @@
                            // answers = num1[i]*num2[i];
                         // }
                     break;
+
+                    case 'modulus': 
+                        // Choose three numerators betwwen 50 and 100, five in the 100's, and 2 in the 200s (below 240)
+                        num1 = num1.concat(getRandomNumbers(51, 99, 0, 3));
+                        num1 = num1.concat(getRandomNumbers(101, 199, 0, 5));
+                        num1 = num1.concat(getRandomNumbers(201, 240, 0, 2));
+                        num1 = num1 = randomShuffle(num1);
+
+                        // Choose divisors from 7 to 18, not 10, to reflect tests
+                        num2 = randomSample([7,8,9,11,12,13,14,15,16,17,18], 10)
+
+                        for (let i = 0; i < 10; i++) {
+                            num1_quest[i] = num1[i];
+                            num2_quest[i] = num2[i];
+                            symbol[i] = 'mod';
+                            ans[i] = num1[i] % num2[i]; 
+                        }
+                    break;
+
+                    case 'factorial': 
+                        num1 = randomShuffle([1,2,3,4,5,6,7,8,9,10]);
+                        let answers = [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800];
+                        let ansIndex;
+                        for (let i = 0; i < 10; i++) {
+                            num1_quest[i] = '';
+                            num2_quest[i] = ' !';
+                            symbol[i] = num1[i];
+                            ansIndex = num1[i] - 1;
+                            ans[i] = answers[ansIndex]; 
+                        }   
+                    break;
+
+                    case 'percent': 
+                        // Examples show percentages of numbers < 100 to 2 d.p
+                        // Examples show only 5 questions are given, so do this here also.
+                        num1 = getRandomNumbers(1, 100, 0, 5); // Choose 5 percentages
+                        num2 = getRandomNumbers(5, 100, 2, 5); // Choose 5 numbers to 2 d.p
+                        // As only 5 questions are shown we need to fill up the
+                        // questions etc. with 'blanks' first, then replace those
+                        // questions that have been calcualted i.e the first 5.
+                        for (let i = 0; i < 10; i++) {
+                            if (i > 4) {
+                                num1_quest[i] = '----'; 
+                                symbol[i] = '-----' ;
+                                num2_quest[i] = '----' ;
+                                ans[i] = 0;
+                            } else {
+                                num1_quest[i] = num1[i];
+                                symbol[i] = '%  of  ';
+                                num2_quest[i] = num2[i];
+                                ans[i] = (num1[i] * num2[i]) / 100;                       
+                                ans[i] = Math.round(ans[i] * 10000) / 10000; // Round to 4 dp. I need this otherwise .99999999 and .000000000005 answers can occur.
+                            }
+                        }
+                    break;
                 }
 
                 realAnswers = ans;
@@ -1447,7 +1503,7 @@
                             <th scope="row" class="table-element">1</th>
                             <td id="q1" class="table-element"></td>
                             <td>
-                                <input type="tel" class=" table-element form-control" id="inputAnswer1" tabindex="0">
+                                <input type="decimal" class=" table-element form-control" id="inputAnswer1" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
@@ -1463,7 +1519,7 @@
                             <th scope="row">2</th>
                             <td id="q2"></td>
                             <td>
-                                <input type="tel" class="form-control" id="inputAnswer2" tabindex="0">
+                                <input type="decimal" class="form-control" id="inputAnswer2" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
@@ -1480,7 +1536,7 @@
                             <th scope="row">3</th>
                             <td id="q3"></td>
                             <td>
-                                <input type="tel" class="form-control" id="inputAnswer3" tabindex="0">
+                                <input type="decimal" class="form-control" id="inputAnswer3" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
@@ -1495,7 +1551,7 @@
                             <th scope="row">4</th>
                             <td id="q4"></td>
                             <td>
-                                <input type="tel" class="form-control" id="inputAnswer4" tabindex="0">
+                                <input type="decimal" class="form-control" id="inputAnswer4" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
@@ -1513,7 +1569,7 @@
                             <th scope="row">5</th>
                             <td id="q5"></td>
                             <td>
-                                <input type="tel" class="form-control" id="inputAnswer5" tabindex="0">
+                                <input type="decimal" class="form-control" id="inputAnswer5" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
@@ -1529,7 +1585,7 @@
                             <th scope="row">6</th>
                             <td id="q6"></td>
                             <td>
-                                <input type="tel" class="form-control" id="inputAnswer6" tabindex="0">
+                                <input type="decimal" class="form-control" id="inputAnswer6" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
@@ -1544,7 +1600,7 @@
                             <th scope="row">7</th>
                             <td id="q7"></td>
                             <td>
-                                <input type="tel" class="form-control" id="inputAnswer7" tabindex="0">
+                                <input type="decimal" class="form-control" id="inputAnswer7" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
@@ -1560,7 +1616,7 @@
                             <th scope="row">8</th>
                             <td id="q8"></td>
                             <td>
-                                <input type="tel" class="form-control" id="inputAnswer8" tabindex="0">
+                                <input type="decimal" class="form-control" id="inputAnswer8" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
@@ -1575,7 +1631,7 @@
                             <th scope="row">9</th>
                             <td id="q9"></td>
                             <td>
-                                <input type="tel" class="form-control" id="inputAnswer9" tabindex="0">
+                                <input type="decimal" class="form-control" id="inputAnswer9" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
@@ -1592,7 +1648,7 @@
                             <th scope="row">10</th>
                             <td id="q10"></td>
                             <td>
-                                <input type="tel" class="form-control" id="inputAnswer10" tabindex="0">
+                                <input type="decimal" class="form-control" id="inputAnswer10" tabindex="0">
                             </td>
                             <td>
                                 <fieldset disabled>
