@@ -15,6 +15,7 @@
                     let buttonGo = document.getElementById("goButton");
                     buttonGo.disabled = true;
                     changeLevel('bronze');
+                    //setAnswerInputState('disabled');
                     
             }
             
@@ -196,6 +197,22 @@
                 buttonPlatinum.addEventListener("click", callback_buttonPlatinum);
             }
 
+            function setAnswerInputState(state) {
+                // 'state' is expected to be either 'enabled' or 'disabled'
+                // used to disable the inputs when no questions are shown, and enable inputs when 
+                // the GO button is pressed.
+
+                for (let i = 0; i < 10; i++) {
+                    if (state == 'enabled') {
+                        document.getElementById(userAnswer_id[i]).disabled = false;
+                    } else if (state == 'disabled') {
+                        document.getElementById(userAnswer_id[i]).disabled = true;
+                    } 
+                }
+            }
+
+            
+
             function callback_buttonBronze () {
                 changeLevel('bronze')
             }
@@ -283,6 +300,9 @@
                     document.getElementById(mark_id[i]).style.backgroundColor = "#cccccc";
                 }
 
+                // Disable user inputs
+                setAnswerInputState('disabled');
+
                 // Clear the time taken from previous go
                 document.getElementById('resultTime').innerHTML = ''
                 document.getElementById('resultScore').innerHTML = '/ 10'
@@ -292,6 +312,8 @@
                     buttonMarkIt.disabled = true;
                     let buttonGo = document.getElementById("goButton");
                     buttonGo.disabled = true;
+                    // Disable user inputs (enable only when questions are shown)
+                    setAnswerInputState('disabled');
                     return                   
                 } 
 
@@ -301,6 +323,8 @@
                 let buttonGo = document.getElementById("goButton");
                 buttonGo.disabled = false;
                 buttonGo.focus()
+
+                
             }
 
             function callback_goButton() {
@@ -319,6 +343,9 @@
                 // Make 'Mark It' button active
                 let buttonMarkIt = document.getElementById("markIt");
                 buttonMarkIt.disabled = false;
+
+                // Enable the user inputs
+                setAnswerInputState('enabled');
 
                 // Clear the time taken from previous go
                 document.getElementById('resultTime').innerHTML = ''
@@ -365,13 +392,30 @@
             function callback_markIt() {
                 correctAnswers = 0
                 // Compare the true answers to the user answers, change box to red/green as appropriate
-                for (let i = 0; i < 10; i++) {
-                    if (document.getElementById(userAnswer_id[i]).value == realAnswers[i]) {
+                if (stageSelected == 301) { // Do something specieal for the factors stage
+                    //user_factors = user_answer.split()
+                    //fact_list = []
+                    ///fact_res = []
+                    //for n in range(len(user_factors)):
+                       // if int(user_factors[n]) in answers[i][0]: # its got to be in the answers list
+                          //  if int(user_factors[n]) not in fact_list: # and not already used
+                              //  fact_list.append(int(user_factors[n]))
+                              //  fact_res.append(1)
+                      //  else:
+                        //    fact_res = [] # one wrong answer 
+                        //    break # is a fail
+                   // res = (len(fact_res) >= 4)
+                   // results.append(res)
+                } else {
+                    
+                    for (let i = 0; i < 10; i++) {
+                        if (document.getElementById(userAnswer_id[i]).value == realAnswers[i]) {
 
-                        document.getElementById(mark_id[i]).style.backgroundColor = colourGreen;
-                        correctAnswers = correctAnswers + 1 
-                    } else {
-                        document.getElementById(mark_id[i]).style.backgroundColor = colourRed;
+                            document.getElementById(mark_id[i]).style.backgroundColor = colourGreen;
+                            correctAnswers = correctAnswers + 1 
+                        } else {
+                            document.getElementById(mark_id[i]).style.backgroundColor = colourRed;
+                        }
                     }
                 }
                 
@@ -469,7 +513,10 @@
                     questionType = 'percent';
                 } else if (factorialStages.includes(currentStage)) {
                     questionType = 'factorial';
+                } else if (factorsStages.includes(currentStage)) {
+                    questionType = 'factors';
                 }
+
 
                 if (isTimesTableStage) {
                     //The selected stage is a times table question. Get the times table being tested.
@@ -747,20 +794,29 @@
                             break;
                             
                             case 328: // 2 digit number < 50 x unit
-                            //TODO Remove multipls of 10 numbers
-                                num2 = getRandomNumbers(11, 49, 0, 10); // get 10 2 digit numbers
+                                num2 = generateNumberArray(10,49,1); // The list of possible num1 options
+                                num2 = deleteNthElements(num2, 10); // remove all numbers ending in 0 so no easy questions
+                                num2 = randomSample(num2, 10); // select 10 from the options, not repeated
                                 num1 = randomChoices([2, 3, 4, 5 ,6, 7, 8, 9],10); // 
                             break;
                             
                             case 329: // Decimal < 5 (1 DP) * units
-                            //TODO Remove .0 numbers
-                                num2 = getRandomNumbers(1.1, 4.9, 1, 10);
+                                num2 = generateNumberArray(10,49,1); // The list of possible num1 options
+                                num2 = deleteNthElements(num2, 10); // remove all numbers ending in 0 so no easy questions
+                                num2 = randomSample(num2, 10); // select 10 from the options, not repeated
+                                for (let i = 0; i < 10; i++) {
+                                    num2[i] = num2[i]/10 // get the decimal point
+                                } 
                                 num1 = randomChoices([2, 3, 4, 5 ,6, 7, 8, 9],10); //
                             break;
                             
                             case 330: // Decimal < 10 (1 DP) * units
-                            //TODO Remove .0 numbers
-                                num2 = getRandomNumbers(5.1, 9.9, 1, 10); // examples have all numbers in the range 5.1 to 9.9
+                                num2 = generateNumberArray(50,99,1); // The list of possible num1 options, examples have all numbers in the range 5.1 to 9.9
+                                num2 = deleteNthElements(num2, 10); // remove all numbers ending in 0 so no easy questions
+                                num2 = randomSample(num2, 10); // select 10 from the options, not repeated
+                                for (let i = 0; i < 10; i++) {
+                                    num2[i] = num2[i]/10 // get the decimal point
+                                } 
                                 num1 = randomChoices([2, 3, 4, 5 ,6, 7, 8, 9],10); //
                             break;
 
@@ -1203,7 +1259,7 @@
                             num1_quest[i] = unicodeSup + '\u2044' + unicodeSub;
                             symbol[i] = '  of  ';
                             num2_quest[i] = num2[i];
-                            answers = num1[i]*num2[i];
+                            ans[i] = num1[i]*num2[i];
                         }
 
                         // If unicode super and subscripts do not render well, use the following
@@ -1271,11 +1327,63 @@
                             }
                         }
                     break;
+
+                    case 'factors':
+                        alert('Gold Stage 1 \n\nEnter 4 factors for each question\nSeparate each one with a decimal point ');
+                        
+                        let factors;
+                        //factors = findFactors(12)
+
+                        while (num1.length < 10) { // keep going unitl we have out 10 numbers to find factors of
+                            num1a = getRandomNumbers(15, 99, 0, 1) // Get a random number
+                            //n = int(n[0])
+                            if (!(num1a in num1)) { // must be unique
+                                factors = findFactors(num1a) // find its factors
+                                if (factors.length > 3) { // If enough factors append it to num1, and add its factors to the ans variable
+                                    num1.push(num1a);
+                                    ans.push([]);
+                                    ans[num1.length-1] = factors;      
+                                }
+                            }
+                        }
+
+                        for (let i = 0; i < 10; i++) {
+                            num1_quest[i] = '';//num1;
+                            symbol[i] = 'Factors of  ';
+                            num2_quest[i] = num1[i]
+                            console.log(ans[i]);
+                        }
+
+                    break;
+
+                        
+
+                
                 }
 
                 realAnswers = ans;
                 return([num1_quest, symbol, num2_quest, ans]); 
             }
+
+            function findFactors(n) {
+                let factorList = [] ;
+                let max = Math.ceil(n** 0.5 ); //** 0.5 + 1;
+                
+                for (let i = 1; i < max ; i++) {
+                    if (n % i == 0) {
+                        if (i != n/i) {
+                            factorList.push(i);
+                            factorList.push(n / i);
+                        } else {
+                            factorList.push(i);
+                        }
+                    }
+                }
+                return(factorList);
+
+            }
+
+                        
 
             function questionExists(num1ToTest, symbolToTest, num2ToTest, num1, symbol, num2) {
             // Searches for common num1, symbol and num2 locations and returns the number of
@@ -1472,7 +1580,7 @@
             <style>
                 @media (max-width: 1000px) {
                     table {
-                        min-width: 300px;
+                        min-width: 330px;
                     }
                 }
             </style>
