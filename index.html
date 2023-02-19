@@ -393,19 +393,37 @@
                 correctAnswers = 0
                 // Compare the true answers to the user answers, change box to red/green as appropriate
                 if (getCurrentStage() == 301) { // Do something specieal for the factors stage
-                    //user_factors = user_answer.split()
-                    //fact_list = []
-                    ///fact_res = []
-                    //for n in range(len(user_factors)):
-                       // if int(user_factors[n]) in answers[i][0]: # its got to be in the answers list
-                          //  if int(user_factors[n]) not in fact_list: # and not already used
-                              //  fact_list.append(int(user_factors[n]))
-                              //  fact_res.append(1)
-                      //  else:
-                        //    fact_res = [] # one wrong answer 
-                        //    break # is a fail
-                   // res = (len(fact_res) >= 4)
-                   // results.append(res)
+                    let results = [];
+                    for (let i = 0; i < 10; i++) { // for each question
+                        let userFactors = document.getElementById(userAnswer_id[i]).value; // get the users factor list
+                        userFactors = userFactors.split('.'); // and split at the . to get individual factor answers
+                        let factList = realAnswers[i]; // The list to check the user answers agaist
+                        let factRes = []; // 
+                        
+
+                        for (let n = 0; n < userFactors.length; n++) { 
+                            userFactor = parseInt(userFactors[n]);
+                            if (factList.includes(userFactor)) { //  its got to be in the answers list
+                                if (!(factRes.includes(userFactor))) // and not already used
+                                    //factList.push(userFactor)
+                                    factRes.push(userFactor)
+                            }  else {
+                                factRes = [] // one wrong answer 
+                                break;  // is a fail
+                            }
+                        }
+                        let res = (factRes.length >= 4); // 4 or more correct factors have been given
+                        results.push(res)
+                    
+                        // update the results box with red or green as appropriate
+                        if (results[i]) {
+                            document.getElementById(mark_id[i]).style.backgroundColor = colourGreen;
+                            correctAnswers = correctAnswers + 1 
+                        } else {
+                            document.getElementById(mark_id[i]).style.backgroundColor = colourRed;
+                        }
+
+                    }
                 } else {
                     
                     for (let i = 0; i < 10; i++) {
@@ -1332,7 +1350,6 @@
                         alert('Gold Stage 1 \n\nEnter 4 factors for each question\nSeparate each one with a decimal point ');
                         
                         let factors;
-                        //factors = findFactors(12)
 
                         while (num1.length < 10) { // keep going unitl we have out 10 numbers to find factors of
                             num1a = getRandomNumbers(15, 99, 0, 1) // Get a random number
@@ -1351,7 +1368,6 @@
                             num1_quest[i] = '';//num1;
                             symbol[i] = 'Factors of  ';
                             num2_quest[i] = num1[i]
-                            console.log(ans[i]);
                         }
 
                     break;
@@ -1563,6 +1579,13 @@
             body {
                 overflow-x: hidden; /* Hide horizontal scrollbar */
                 text-align: center;
+                width: 100%;
+                height: 100vh;
+                /*background: url("background.png") top right;*/
+                background-color: #ffffff;
+                background-size: cover;
+                position: relative;
+            }
             }
         </style>
 
@@ -1573,10 +1596,10 @@
             </div>
             <!-- Stage Headings -->
             <div class="row d-flex container justify-content-center" style="width: auto;">
-                <button class="btn btn-primary" type="submit" id="buttonBronze" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #CD7F32; border-color: #919191;">Bronze</button>
-                <button class="btn btn-primary" type="submit" id="buttonSilver" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #adadad; border-color: #919191;">Silver</button>
-                <button class="btn btn-primary" type="submit" id="buttonGold" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #D4AF37; border-color: #919191;">Gold</button>
-                <button class="btn btn-primary" type="submit" id="buttonPlatinum" tabindex="0" style="margin-left: .5%; min-width: 85px; background-color: #e0dfdc; border-color: #919191;">Platinum</button>
+                <button class="btn btn-primary" type="submit" id="buttonBronze" tabindex="0" style="margin-left: .5%; min-width: 80px; background-color: #CD7F32; border-color: #919191;">Bronze</button>
+                <button class="btn btn-primary" type="submit" id="buttonSilver" tabindex="0" style="margin-left: .5%; min-width: 80px; background-color: #adadad; border-color: #919191;">Silver</button>
+                <button class="btn btn-primary" type="submit" id="buttonGold" tabindex="0" style="margin-left: .5%; min-width: 80px; background-color: #D4AF37; border-color: #919191;">Gold</button>
+                <button class="btn btn-primary" type="submit" id="buttonPlatinum" tabindex="0" style="margin-left: .5%; min-width: 80px; background-color: #e0dfdc; border-color: #919191;">Platinum</button>
             </div>
             <style>
                 @media (max-width: 1000px) {
@@ -1787,11 +1810,11 @@
                     </table>
                 </table>
             </div>
-            <div id="spacer" style="width: 200px; height: 620px; margin-right:0px;"></div>
+            <div id="spacer" style="width: 200px; height: 590px; margin-right:0px;"></div>
             <div class="row">
                 <!--Mark it button-->
                 <div class="container-fluid d-flex justify-content-center">
-                    <button class="btn btn-primary" type="submit" id="markIt" tabindex="0">Mark Answers</button>
+                    <button class="btn btn-primary" style="margin-bottom: 100px;" type="submit" id="markIt" tabindex="0">Mark Answers</button>
                 </div>
             </div>
         </div>
