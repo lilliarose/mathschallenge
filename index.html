@@ -14,9 +14,7 @@
                     buttonMarkIt.disabled = true;
                     let buttonGo = document.getElementById("goButton");
                     buttonGo.disabled = true;
-                    changeLevel('bronze');
-                    //setAnswerInputState('disabled');
-                    
+                    changeLevel('bronze');                   
             }
             
             //define variables with script-wide scope
@@ -211,8 +209,6 @@
                 }
             }
 
-            
-
             function callback_buttonBronze () {
                 changeLevel('bronze')
             }
@@ -231,7 +227,7 @@
 
             function changeLevel (newLevel) {
                 if (currentLevel == newLevel) {
-                    return // no need to change anything
+                    return; // no need to change anything
                 }              
                 // TODO:
                 // make newLevel button look pressed, and un-press the currentLevel
@@ -290,7 +286,7 @@
             }
 
 
-            //called when dropdown list selected item is changed
+            // called when dropdown list selected item is changed
             function callback_changeStage() {  
 
                 // Clear any previous questions, user answers and marks from the screen
@@ -424,7 +420,7 @@
                         }
 
                     }
-                } else {
+                } else { // Any other stage is more simple to mark:
                     
                     for (let i = 0; i < 10; i++) {
                         if (document.getElementById(userAnswer_id[i]).value == realAnswers[i]) {
@@ -672,6 +668,13 @@
                                 num1 = randomShuffle(num1);
                             break;
 
+                            case 316: // Multiples of 10 squared.
+                            num1 = randomShuffle([1,2,3,4,5,6,7,8,9,10]);
+                            for (let i = 0; i < 10; i++) {
+                                num1[i] = num1[i]*10;
+                            }
+                            break;
+
                             case 427: // 3-digit number squared
                                 // Pick 2 numbers in the 100s, then one each in the following hundreds to 900.
                                 num1a = getRandomNumbers(200, 299, 0, 2); // the 200's
@@ -761,7 +764,6 @@
 
                         // Do common cube root stuff here
                         for (let i = 0; i < 10; i++) {
-                                //num2[i] = num1[i];
                                 ans[i] = num1[i];
                                 num1_quest[i] = '';
                                 num2_quest[i] = num1[i]*num1[i]*num1[i];
@@ -818,7 +820,7 @@
                                 num1 = randomChoices([2, 3, 4, 5 ,6, 7, 8, 9],10); // 
                             break;
                             
-                            case 329: // Decimal < 5 (1 DP) * units
+                            case 329: // Decimal < 5 (1 DP) * units  
                                 num2 = generateNumberArray(10,49,1); // The list of possible num1 options
                                 num2 = deleteNthElements(num2, 10); // remove all numbers ending in 0 so no easy questions
                                 num2 = randomSample(num2, 10); // select 10 from the options, not repeated
@@ -828,7 +830,7 @@
                                 num1 = randomChoices([2, 3, 4, 5 ,6, 7, 8, 9],10); //
                             break;
                             
-                            case 330: // Decimal < 10 (1 DP) * units
+                            case 330: // Decimal < 10 (1 DP) * units 
                                 num2 = generateNumberArray(50,99,1); // The list of possible num1 options, examples have all numbers in the range 5.1 to 9.9
                                 num2 = deleteNthElements(num2, 10); // remove all numbers ending in 0 so no easy questions
                                 num2 = randomSample(num2, 10); // select 10 from the options, not repeated
@@ -961,7 +963,7 @@
                             break;
 
 
-                            case 413: // 5/6 digit number to 2 d.p. x U
+                            case 413: // 5/6 digit number to 2 d.p. x U 
                                 // get 5 5-digit numbers, and 5 6-digit numbers, with no .x0 endings.
                                 dpTwo = generateNumberArray(0,100,1); // First get the 2-dp options
                                 dpTwo = deleteNthElements(dpTwo, 10);
@@ -976,7 +978,7 @@
                                 }         
                             break;
 
-                            case 415: // 6 digit number to 3 d.p. x U
+                            case 415: // 6 digit number to 3 d.p. x U 
                                 dpThree = generateNumberArray(0,1000,1); // First get the 3-dp options
                                 dpThree = deleteNthElements(dpThree, 10);
                                 dpThree = randomSample(dpThree, 10); // select 10 from the options
@@ -997,7 +999,7 @@
                                 num2 = randomSample(num2, 10); // select 10 from the options
                             break;
 
-                            case 423: // 5 digit numbers to 2 dp x 3
+                            case 423: // 5 digit numbers to 2 dp x 3 
                             // get 5 5-digit numbers, and 5 6-digit numbers, with no .x0 endings.
                                 dpTwo = generateNumberArray(0,100,1); // First get the 2-dp options
                                 dpTwo = deleteNthElements(dpTwo, 10);
@@ -1022,12 +1024,13 @@
                             }                          
                         }
 
-                        if (currentStage == 424) { // 4 and 5 digit number to 1 d.p. divided by 3
+                        // Round answers to avoid answers being calculated as .00000000x numbers
+                        //if (currentStage == 424) { // 4 and 5 digit number to 1 d.p. divided by 3
                             // round answer to 2 dp.
                             for (let i = 0; i < 10; i++) {
-                                ans[i] = Math.round(ans[i] * 100) / 100
+                                ans[i] = Math.round(ans[i] * 1000) / 1000 // Round all answers to 3dp as this is the most precission in any of the stages.
                             }
-                        }
+                        //}
                         
                         num1_quest = num1;
                         num2_quest = num2;
@@ -1055,12 +1058,27 @@
                             break;
                             
                             case 309: // Double decimals less than 1 with 2dp
-                                num1 = getRandomNumbers(0.01, 0.99, 2, 10); 
+                                num1 = generateNumberArray(0,100,1); // First get the 2-dp options
+                                num1 = deleteNthElements(num1, 10); // remove any .x0 numbers
+                                num1 = randomSample(num1, 10); // select 10 from the options
+                                for (let i = 0; i < 10; i++) {
+                                    num1[i] = num1[i]/100; // and convert to 2 dp
+                                    num1[i] = Math.round(num1[i] * 100) / 100 //round to 2 dp to prevent small errors
+                                }
                             break;
                             
                             case 311: // Double decimals with 2dp
                                 // Maximum in sample tests is 22.84, so choose to limit to 25
-                                num1 = getRandomNumbers(1.01, 24.99, 2, 10);
+                                num1b = getRandomNumbers(1, 24, 0, 10); // get the whole part of the number                                num1a = generateNumberArray(0,100,1); // First get the 2-dp options
+                                num1a = generateNumberArray(0,100,1); // get the 2-dp options
+                                num1a = deleteNthElements(num1a, 10); // remove any .x0 numbers
+                                num1a = randomSample(num1a, 10); // select 10 from the options
+                                for (let i = 0; i < 10; i++) {
+                                    num1a[i] = num1a[i]/100; // and convert to 2 dp
+                                    num1[i] = num1a[i] + num1b[i]; // and make the full number
+                                    num1[i] = Math.round(num1[i] * 100) / 100 //round to 2 dp to prevent small errors
+                                }
+                                
                             break;
                             
                             case 312: // Double multiples of 10 up to 1000               
@@ -1277,7 +1295,6 @@
                             num1_quest[i] = unicodeSup + '\u2044' + unicodeSub;
                             symbol[i] = '  of  ';
                             num2_quest[i] = num2[i];
-                            ans[i] = num1[i]*num2[i];
                         }
 
                         // If unicode super and subscripts do not render well, use the following
@@ -1365,7 +1382,7 @@
                         }
 
                         for (let i = 0; i < 10; i++) {
-                            num1_quest[i] = '';//num1;
+                            num1_quest[i] = '';
                             symbol[i] = 'Factors of  ';
                             num2_quest[i] = num1[i]
                         }
@@ -1378,12 +1395,14 @@
                 }
 
                 realAnswers = ans;
+                //console.log(ans); // Use to check real answers
                 return([num1_quest, symbol, num2_quest, ans]); 
+                
             }
 
             function findFactors(n) {
                 let factorList = [] ;
-                let max = Math.ceil(n** 0.5 ); //** 0.5 + 1;
+                let max = Math.ceil(n** 0.5 );
                 
                 for (let i = 1; i < max ; i++) {
                     if (n % i == 0) {
@@ -1466,7 +1485,7 @@
             //function for generating an array of numbers with a 'start' 'end' and 'step'
             function generateNumberArray(start, end, step) {
                 let array = [];
-                //(let i = 0; i < k; i++){
+
                 for (let i = start; i <= end; i=i+step) {
                     array.push(i);
                 }
@@ -1629,7 +1648,7 @@
                         <tr>
                             <th scope="col" style="width: 5%"></th>
                             <th scope="col" style="width: 50%">Question</th>
-                            <th scope="col" style="width: 40%">Your Answer</th>
+                            <th scope="col" style="width: 40%">Answer</th>
                             <th scope="col" style="width: 9%">Marks</th>
                         </tr>
                         </thead>
@@ -1809,7 +1828,7 @@
                     </table>
                 </table>
             </div>
-            <div id="spacer" style="width: 200px; height: 590px; margin-right:0px;"></div>
+            <div id="spacer" style="width: 200px; height: 560px; margin-right:0px;"></div>
             <div class="row">
                 <!--Mark it button-->
                 <div class="container-fluid d-flex justify-content-center">
