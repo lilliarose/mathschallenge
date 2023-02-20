@@ -527,8 +527,6 @@
                     questionType = 'percent';
                 } else if (factorialStages.includes(currentStage)) {
                     questionType = 'factorial';
-                } else if (factorsStages.includes(currentStage)) {
-                    questionType = 'factors';
                 }
 
 
@@ -1364,14 +1362,15 @@
                     break;
 
                     case 'factors':
-                        alert('Gold Stage 1 \n\nEnter 4 factors for each question\nSeparate each one with a decimal point ');
+                        alert('Gold Stage 1 \n\nEnter 4 factors for each question.\nSeparate each one with a decimal point ');
                         
                         let factors;
+                        num1b = 0;
 
                         while (num1.length < 10) { // keep going unitl we have out 10 numbers to find factors of
                             num1a = getRandomNumbers(15, 99, 0, 1) // Get a random number
-                            //n = int(n[0])
-                            if (!(num1a in num1)) { // must be unique
+                            num1a = num1a[0];
+                            if (!(num1.includes(num1a))) { // must be unique
                                 factors = findFactors(num1a) // find its factors
                                 if (factors.length > 3) { // If enough factors append it to num1, and add its factors to the ans variable
                                     num1.push(num1a);
