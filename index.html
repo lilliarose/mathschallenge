@@ -195,6 +195,15 @@
                 buttonPlatinum.addEventListener("click", callback_buttonPlatinum);
             }
 
+            function changeBorderWidth(levelIDNumber) {
+                let buttonIds = ['buttonBronze','buttonSilver','buttonGold','buttonPlatinum']
+                for (let i = 0; i < 4; i++) {
+                    document.getElementById(buttonIds[i]).style.borderWidth = '1px';
+                }
+                document.getElementById(buttonIds[levelIDNumber]).style.borderWidth = '3px';
+
+            }
+
             function setAnswerInputState(state) {
                 // 'state' is expected to be either 'enabled' or 'disabled'
                 // used to disable the inputs when no questions are shown, and enable inputs when 
@@ -241,21 +250,25 @@
                     case 'bronze':
                         levelID = levelBronzeID;
                         levelText = levelBronzeText;
+                        changeBorderWidth(0)
                         break;
 
                     case 'silver':
                         levelID = levelSilverID;
                         levelText = levelSilverText;
+                        changeBorderWidth(1)
                         break;
                     
                     case 'gold':
                         levelID = levelGoldID;
                         levelText = levelGoldText;
+                        changeBorderWidth(2)
                         break;
 
                     case 'platinum':
                         levelID = levelPlatinumID;
                         levelText = levelPlatinumText;
+                        changeBorderWidth(3)
                         break;
 
                     default:
@@ -1613,10 +1626,10 @@
             </div>
             <!-- Stage Headings -->
             <div class="row d-flex container justify-content-center" style="width: auto;">
-                <button class="btn btn-primary" type="submit" id="buttonBronze" tabindex="0" style="margin-left: .5%; min-width: 80px; background-color: #CD7F32; border-color: #919191;">Bronze</button>
-                <button class="btn btn-primary" type="submit" id="buttonSilver" tabindex="0" style="margin-left: .5%; min-width: 80px; background-color: #adadad; border-color: #919191;">Silver</button>
-                <button class="btn btn-primary" type="submit" id="buttonGold" tabindex="0" style="margin-left: .5%; min-width: 80px; background-color: #D4AF37; border-color: #919191;">Gold</button>
-                <button class="btn btn-primary" type="submit" id="buttonPlatinum" tabindex="0" style="margin-left: .5%; min-width: 80px; background-color: #e0dfdc; border-color: #919191;">Platinum</button>
+                <button class="btn btn-primary" type="submit" id="buttonBronze" tabindex="0" style="background-color: #CD7F32;">Bronze</button>
+                <button class="btn btn-primary" type="submit" id="buttonSilver" tabindex="0" style="background-color: #adadad;">Silver</button>
+                <button class="btn btn-primary" type="submit" id="buttonGold" tabindex="0" style="background-color: #D4AF37;">Gold</button>
+                <button class="btn btn-primary" type="submit" id="buttonPlatinum" tabindex="0" style="background-color: #e0dfdc;">Platinum</button>
             </div>
             <style>
                 @media (max-width: 1000px) {
@@ -1626,8 +1639,11 @@
                 }
 
                 .btn {
-                    font-size: 15
-                    px;
+                    font-size: 15px;
+                    margin-left: .5%;
+                    min-width: 80px; 
+                    border-color: #919191;
+                    border-width: 1px;
                 }
 
             </style>
