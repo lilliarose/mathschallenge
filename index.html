@@ -480,6 +480,28 @@
                 //console.log(levelNumber)
                 if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==10)) {
                     alert('you did it :)')
+                    
+                    // for starting the confetti 
+
+                    const start = () => {
+                        setTimeout(function() {
+                            confetti.start()
+                        }, 1000); // 1000 is time that after 1 second start the confetti ( 1000 = 1 sec)
+                    };
+
+                        //  for stopping the confetti 
+
+                    const stop = () => {
+                        setTimeout(function() {
+                            confetti.stop()
+                        }, 5000); // 5000 is time that after 5 second stop the confetti ( 5000 = 5 sec)
+                    };
+                        // after this here we are calling both the function so it works
+                    start();
+                    stop();
+
+                        // if you dont want to make it stop and make it infinite you can just remove the stop function 😊
+
                 } else if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==5) && (getCurrentStage() == 430)){
                     alert('you did it :)')
                 } else {
@@ -1897,7 +1919,7 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+        <script src="confetti.js"></script>
     </body>
 
     <footer>
