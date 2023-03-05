@@ -28,6 +28,8 @@
             //let colourGold = '#D4AF37';
             //let colourPlatinum = '#E5E4E2';
 
+            const timeLimit = [60, 60, 120, 120] // in seconds for Bronze, silver, gold, platinum respectively
+
             const question_id = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10']
             const userAnswer_id = ['inputAnswer1','inputAnswer2','inputAnswer3','inputAnswer4','inputAnswer5','inputAnswer6','inputAnswer7','inputAnswer8','inputAnswer9','inputAnswer10']
             const mark_id = ['mark1','mark2','mark3','mark4','mark5','mark6','mark7','mark8','mark9','mark10']
@@ -315,8 +317,13 @@
 
                 // Clear the time taken from previous go
                 document.getElementById('resultTime').innerHTML = ''
-                document.getElementById('resultScore').innerHTML = '/ 10'
+                if (getCurrentStage() == 430) { // This is Platinum 30 with only 5 questions
+                    document.getElementById('resultScore').innerHTML = '/ 5'
 
+                } else {
+                    document.getElementById('resultScore').innerHTML = '/ 10'
+                }
+                
                 if (getCurrentStage() == "unselected") {
                     let buttonMarkIt = document.getElementById("markIt");
                     buttonMarkIt.disabled = true;
@@ -358,12 +365,17 @@
                 setAnswerInputState('enabled');
 
                 // Clear the time taken from previous go
-                document.getElementById('resultTime').innerHTML = ''
-                document.getElementById('resultScore').innerHTML = '/ 10'
+                document.getElementById('resultTime').innerHTML = '';
+                if (getCurrentStage() == 430) { // This is Platinum 30 with only 5 questions
+                    document.getElementById('resultScore').innerHTML = '/ 5'
+
+                } else {
+                    document.getElementById('resultScore').innerHTML = '/ 10'
+                }
 
                 // Get the question text and answers
                 let [num1_quest, symbol, num2_quest, ans] = getQuestions();
-                
+                console.log(ans)
                 // Fill up the questions 
                     for (let i = 0; i < 10; i++) {
                         // Runs 10 times and changes element id then put in a question to be shown
@@ -437,10 +449,13 @@
                 } else { // Any other stage is more simple to mark:
                     
                     for (let i = 0; i < 10; i++) {
-                        if (document.getElementById(userAnswer_id[i]).value == realAnswers[i]) {
+                        if ((getCurrentStage() == 430) && (i > 4)) {
+                            // do nothing after question 5 as there are no questions beyond 5 for PLatinum 30
 
+                        } else if (document.getElementById(userAnswer_id[i]).value == realAnswers[i]) {
                             document.getElementById(mark_id[i]).style.backgroundColor = colourGreen;
                             correctAnswers = correctAnswers + 1 
+
                         } else {
                             document.getElementById(mark_id[i]).style.backgroundColor = colourRed;
                         }
@@ -449,8 +464,29 @@
                 
                 // Find and display the time taken 
                 let timerEnd = new Date();
-                document.getElementById('resultTime').innerHTML = Math.round((timerEnd.getTime()-timerStart.getTime())/1000) + ' secs'
-                document.getElementById('resultScore').innerHTML = correctAnswers + ' / 10'
+                let timeInSecs = Math.round((timerEnd.getTime()-timerStart.getTime())/1000);
+                document.getElementById('resultTime').innerHTML =  timeInSecs + ' secs'
+                if (getCurrentStage() == 430) { // This is Platinum 30 with only 5 questions
+                    document.getElementById('resultScore').innerHTML = correctAnswers + '/ 5'
+
+                } else {
+                    document.getElementById('resultScore').innerHTML = correctAnswers + '/ 10'
+                }
+
+                // Change 'Mark It' button colour based on results and time limit.
+
+                //timeLimit 
+                let levelVal = Math.floor(getCurrentStage()/100) -1; // gives 0 for bronze 1 for silver etc.
+                //console.log(levelNumber)
+                if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==10)) {
+                    alert('you did it :)')
+                } else if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==5) && (getCurrentStage() == 430)){
+                    alert('you did it :)')
+                } else {
+                    alert('either too slow or not 100%')
+                }
+
+
 
             }
                   
@@ -1611,12 +1647,13 @@
             body {
                 overflow-x: hidden; /* Hide horizontal scrollbar */
                 text-align: center;
-                width: 100%;
+                /*width: 100%;
+                margin: auto;
                 height: 100vh;
-                /*background: url("background.png") top right;*/
+                background: url("background.png") top right;
                 background-color: #ffffff;
                 background-size: cover;
-                position: relative;
+                position: relative;*/
             }
         </style>
 
