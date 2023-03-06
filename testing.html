@@ -412,6 +412,26 @@
             }
 
             function callback_markIt() {
+                // for starting the confetti 
+
+                const start = () => {
+                    setTimeout(function() {
+                        confetti.start()
+                    }, 1000); // 1000 is time that after 1 second start the confetti ( 1000 = 1 sec)
+                };
+
+                //  for stopping the confetti 
+
+                const stop = () => {
+                    setTimeout(function() {
+                        confetti.stop()
+                    }, 5000); // 5000 is time that after 5 second stop the confetti ( 5000 = 5 sec)
+                };
+                        // after this here we are calling both the function so it works
+                    start();
+                    stop();
+
+                
                 correctAnswers = 0
                 // Compare the true answers to the user answers, change box to red/green as appropriate
                 if (getCurrentStage() == 301) { // Do something specieal for the factors stage
@@ -474,42 +494,20 @@
                 }
 
                 // Change 'Mark It' button colour based on results and time limit.
-                /*
+
 
                 //timeLimit 
                 let levelVal = Math.floor(getCurrentStage()/100) -1; // gives 0 for bronze 1 for silver etc.
-                //console.log(levelNumber)
                 if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==10)) {
-                    alert('you did it :)')
-                    
-                    // for starting the confetti 
-
-                    const start = () => {
-                        setTimeout(function() {
-                            confetti.start()
-                        }, 1000); // 1000 is time that after 1 second start the confetti ( 1000 = 1 sec)
-                    };
-
-                        //  for stopping the confetti 
-
-                    const stop = () => {
-                        setTimeout(function() {
-                            confetti.stop()
-                        }, 5000); // 5000 is time that after 5 second stop the confetti ( 5000 = 5 sec)
-                    };
-                        // after this here we are calling both the function so it works
-                    start();
-                    stop();
+                    //alert('you did it :)')
 
                         // if you dont want to make it stop and make it infinite you can just remove the stop function 😊
 
                 } else if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==5) && (getCurrentStage() == 430)){
-                    alert('you did it :)')
+                    //alert('you did it :)')
                 } else {
-                     alert('either too slow or not 100%')
+                     //alert('either too slow or not 100%')
                 }
-
-               */
 
             }
                   
