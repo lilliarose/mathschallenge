@@ -411,7 +411,7 @@
                 return(stagesPerLevel)
             }
 
-            function callback_markIt() {
+            function makeConfetti() {
                 // for starting the confetti 
 
                 const start = () => {
@@ -432,6 +432,9 @@
                     stop();
                 // if you dont want to make it stop and make it infinite you can just remove the stop function 😊
 
+            }
+
+            function callback_markIt() {
                 
                 correctAnswers = 0
                 // Compare the true answers to the user answers, change box to red/green as appropriate
@@ -500,9 +503,9 @@
                 //timeLimit 
                 let levelVal = Math.floor(getCurrentStage()/100) -1; // gives 0 for bronze 1 for silver etc.
                 if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==10)) {
-                    //alert('you did it :)')
+                    makeConfetti()
                 } else if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==5) && (getCurrentStage() == 430)){
-                    //alert('you did it :)')
+                    makeConfetti()
                 } else {
                      //alert('either too slow or not 100%')
                 }
