@@ -417,7 +417,7 @@
                 const start = () => {
                     setTimeout(function() {
                         confetti.start()
-                    }, 1000); // 1000 is time that after 1 second start the confetti ( 1000 = 1 sec)
+                    }, 0); // 1000 is time that after 1 second start the confetti ( 1000 = 1 sec)
                 };
 
                 //  for stopping the confetti 
@@ -430,6 +430,7 @@
                         // after this here we are calling both the function so it works
                     start();
                     stop();
+                // if you dont want to make it stop and make it infinite you can just remove the stop function 😊
 
                 
                 correctAnswers = 0
@@ -500,9 +501,6 @@
                 let levelVal = Math.floor(getCurrentStage()/100) -1; // gives 0 for bronze 1 for silver etc.
                 if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==10)) {
                     //alert('you did it :)')
-
-                        // if you dont want to make it stop and make it infinite you can just remove the stop function 😊
-
                 } else if ((timeInSecs <  timeLimit[levelVal]) && (correctAnswers==5) && (getCurrentStage() == 430)){
                     //alert('you did it :)')
                 } else {
