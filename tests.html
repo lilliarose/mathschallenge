@@ -34,8 +34,8 @@
             let timeLimit; // the time limit (in seconds) for the currently selected stage
             let timeLimitBronze = 120; // the time limit (in seconds)
             let timeLimitSilver = 120; // the time limit (in seconds)
-            let timeLimitGold = 120; // the time limit (in seconds)
-            let timeLimitPlatinum = 120; // the time limit (in seconds)
+            let timeLimitGold = 240; // the time limit (in seconds)
+            let timeLimitPlatinum = 240; // the time limit (in seconds)
             
             //does this as soon as the window loads
             window.onload = (event) => {
@@ -423,6 +423,10 @@
                     totalMarks += marks[i];
                 }
                 cell4.innerHTML = totalMarks + ' / ' + numQuestions;
+
+                row = table.insertRow(-1); 
+                row.setAttribute("style","margin-bottom: 75px;");
+                
             }
 
             function markTest() {
@@ -497,6 +501,7 @@
             overflow-x: hidden; /* Hide horizontal scrollbar */
             text-align: center;
             background-color: white;
+            height: 100vh;
             /*width: 100%;
             margin: auto;
             height: 100vh;
@@ -512,11 +517,21 @@
     </style>
 
     <div class="container" id="container" style="padding: 0;">
+        
         <div class="container" style="padding: 0;">
             <!--Title-->
             <div class="row d-flex justify-content-center" style="padding-bottom: 1%; padding-top: 1%; margin: 0;">
                 <h1 class="white">Tests</h1>
             </div>
+            <!--Timings-->
+            <button class="timings btn btn-light" data-toggle="collapse" style="margin-top: 10px; margin-bottom: 10px;" data-target="#testTimes">Time Goals</button>
+            <div id="testTimes" class="collapse" style="padding-top: 10px;">
+                    <p class="text-align-center" style="color:#505050"><strong>Bronze:</strong> 2 mins</p>
+                    <p class="text-align-center" style="color:#505050"><strong>Silver:</strong> 2 mins</p>
+                    <p class="text-align-center" style="color:#505050"><strong>Gold:</strong> 4 mins</p>
+                    <p class="text-align-center" style="color:#505050"><strong>Platinum:</strong> 4 mins</p>
+            </div>
+
             <!-- Stage Headings -->
             <div class="row d-flex container justify-content-center" style="width: auto; margin: 0;">
                 <p>There are 20 questions to complete.<br>Questions appear one at a time.<br>Submit an answer to move on to the next one.</p>
@@ -570,7 +585,7 @@
        </div>
         <div class="container marks-table" id="marks-table-container">
             <div class="row d-flex justify-content-center">
-                <table class="table" id="marks-table" style="width: 40%; min-width: 320px; transform: translate(-50%,0); position: absolute; left: 50%">
+                <table class="table" id="marks-table" style="margin-bottom: 10px; width: 40%; min-width: 320px; transform: translate(-50%,0); position: absolute; left: 50%">
                     <thead>
                         <tr>
                             <th scope="col" style="width: 5%"></th>
@@ -584,4 +599,9 @@
         </div>
     </div>
 </body>
+
+<!--<footer style="background-color: #f8f9fa; padding-top: 10px; padding-bottom: 3px;">
+
+</footer>-->
+
 </html>
